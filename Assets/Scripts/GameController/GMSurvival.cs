@@ -61,8 +61,10 @@ public class GMSurvival : MonoBehaviour
 
         yield return new WaitForSeconds(5f);
 
-        PlayerUI.current.ToggleUIElement(ui_element.all, true);
-        PlayerUI.current.ToggleUIElement(ui_element.inventory, false);
+        PlayerUI.current.ToggleUIElement(ui_element.gameplay, true);
+        PlayerUI.current.ToggleUIElement(ui_element.controls, true);
+        PlayerUI.current.ToggleUIElement(ui_element.stats, true);
+        PlayerUI.current.ToggleUIElement(ui_element.actionlog, true);
         StartCoroutine(WavePreparation());
     }
 
@@ -130,7 +132,7 @@ public class GMSurvival : MonoBehaviour
     {
         PlayerUI.current.ShowBigCenterMSG("Wave complete", col_win, "", 2, 0.5f);
 
-        PlayerUI.current.ToggleUIElement(ui_element.all, false);
+        PlayerUI.current.ToggleUIElement(ui_element.gameplay, false);
         CameraControllerBase.current.ChangeToState("waveEnd_0", 0);
         yield return new WaitForSeconds(0.25f);
 
@@ -139,7 +141,8 @@ public class GMSurvival : MonoBehaviour
         if (aw.isArmed) aw.currWEntity.TryToReload();
 
         yield return new WaitForSeconds(3.75f);
-        PlayerUI.current.ToggleUIElement(ui_element.all, true);
+        PlayerUI.current.ToggleUIElement(ui_element.gameplay, true);
+        PlayerUI.current.ToggleUIElement(ui_element.controls, true);
 
         Wave++;
         label_wave.text = "Wave: <color=#FF9632>" + Wave + "</color>";

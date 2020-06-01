@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9580b245c61770b42b3a6342004f2670, type: 3}
+  m_Name: shotgun
+  m_EditorClassIdentifier: 
+  Name: Shotgun
+  type: 0
+  prefab: {fileID: 558274864982405353, guid: 019ad7c6e1632e64495df1ab67af7d38, type: 3}
+  sfx_shot: {fileID: 8300000, guid: e1dedf976c8c3a2499365b0586aa08aa, type: 3}
+  sfx_chamber: {fileID: 8300000, guid: 54731c5cbb86fd441b172280d755c204, type: 3}
+  sfx_insert: {fileID: 8300000, guid: c51758c6fe1ed2345b80a723ec08b766, type: 3}
+  sfx_remove: {fileID: 0}
+  icon: {fileID: -8708776809946123759, guid: c06fb318e817af646a6bfef7e5908c44, type: 3}
+  firingMode: 0
+  reloadMode: 1
+  clipSize: 7
+  fireRate: 70
+  muzzleSpeed: 420
+  spreading: 0
+  pelletSpreading: 0.6
+  aimFOV: 50
+  ammoType: {fileID: 11400000, guid: 129f1e9824c87a14fb7006874a448b4a, type: 2}
+  damageMult: 1
+  caliberMass: 3.38
+  pellets: 9
+  hasScope: 0
+  adsOffset: {x: 0.15, y: 0.04, z: 0.2}
+  recoilPower: {x: 10, y: 5, z: 5}
+  recoilOffsetPower: {x: 0, y: 0, z: 0}
+  recoilAttack: 16
+  recoilDecay: 8
+  canCrouch: 1
+  speedCap: 6
+  useAim: 0
+  pitchShift: 0
+  bonePivot: 12
+  offset: {x: 0, y: 0, z: 0}
+  sprintPivot: 18
+  sprintOffset: {x: -0.15, y: -0.2, z: 0.1}
+  sprintAngle: {x: 0, y: 90, z: 90}
+  sprintHIK:
+  - 1
+  - 0
+  grip: 1
+  hPosition: {x: -0.25, y: 0.4, z: 0.03}
+  hRotation: {x: 60, y: 90, z: 0}
+  animRel_full: {fileID: 0}
+  animRel_tactical: {fileID: 0}
+  animRel_Start: {fileID: 7400000, guid: 39309a3584fef2940a02f3d281c70bf6, type: 2}
+  animRel_Insert: {fileID: 7400000, guid: 0305e8bad950af1448fc286593636dbd, type: 2}
+  animRel_End: {fileID: 7400000, guid: 36802101618aed54ea7b372448a6ffba, type: 2}
+  animChamber: {fileID: 7400000, guid: 91e3491641bd16b449e3b8b010b6e94b, type: 2}
+  animShot: {fileID: 7400000, guid: ba94ee8d055d57e478701afab04d274c, type: 2}
+  impact: 7.098
+  damage: 14.196
+  dps: 16.562

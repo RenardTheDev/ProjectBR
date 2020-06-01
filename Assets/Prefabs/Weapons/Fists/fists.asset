@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9580b245c61770b42b3a6342004f2670, type: 3}
+  m_Name: fists
+  m_EditorClassIdentifier: 
+  Name: Fists
+  type: 2
+  prefab: {fileID: 4532954637162832298, guid: bf0b1aa9d8d7d7b4180185b3656b65ad, type: 3}
+  sfx_shot: {fileID: 0}
+  sfx_chamber: {fileID: 0}
+  sfx_insert: {fileID: 0}
+  sfx_remove: {fileID: 0}
+  icon: {fileID: 21300000, guid: 214290bdac58da64ea7dcecd2e49b94b, type: 3}
+  firingMode: 0
+  reloadMode: 0
+  clipSize: 1
+  fireRate: 150
+  muzzleSpeed: 1000
+  spreading: 0
+  pelletSpreading: 0
+  aimFOV: 60
+  ammoType: {fileID: 0}
+  damageMult: 1
+  caliberMass: 0
+  pellets: 1
+  hasScope: 0
+  adsOffset: {x: 0, y: 0.1, z: 0}
+  recoilPower: {x: 0, y: 0, z: 0}
+  recoilOffsetPower: {x: 0, y: 0, z: 0}
+  recoilAttack: 0
+  recoilDecay: 0
+  canCrouch: 1
+  speedCap: 10
+  useAim: 0
+  pitchShift: 0
+  bonePivot: 10
+  offset: {x: 0, y: 0, z: 0}
+  sprintPivot: 54
+  sprintOffset: {x: 0, y: 0, z: 0}
+  sprintAngle: {x: 0, y: 0, z: 0}
+  sprintHIK:
+  - 0
+  - 0
+  sprintAnimation: {fileID: -203655887218126122, guid: dcb9ea57ce9dcb448b26ccfdd73e26f0,
+    type: 3}
+  hPosition: {x: 0, y: 0, z: 0}
+  hRotation: {x: 0, y: 0, z: 0}
+  animRel_full: {fileID: 0}
+  animRel_tactical: {fileID: 0}
+  animRel_Start: {fileID: 0}
+  animRel_Insert: {fileID: 0}
+  animRel_End: {fileID: 0}
+  animChamber: {fileID: 0}
+  impact: 0
+  damage: 0
+  dps: 0

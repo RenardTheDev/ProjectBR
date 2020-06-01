@@ -9,6 +9,7 @@ public class PauseMenu : MonoBehaviour
     public static PauseMenu inst;
 
     public bool isPaused;
+    public bool isSettingsActive;
     public bool isPhotomodeActive;
 
     public GameObject MenuContainer;
@@ -17,7 +18,7 @@ public class PauseMenu : MonoBehaviour
     private void Awake()
     {
         inst = this;
-        SettingsManager.instance.closeSettings.onClick.AddListener(HideSettings);
+        SettingsManager.instance.closeSettings.onClick.AddListener(() => ToggleSettings(false));
     }
 
     private void Update()
@@ -28,9 +29,13 @@ public class PauseMenu : MonoBehaviour
             {
                 TogglePhotomode(false);
             }
+            else if (isSettingsActive)
+            {
+                ToggleSettings(false);
+            }
             else
             {
-                if (isPaused) { UnpauseGame(); } else { PauseGame(); }
+                TogglePause(!isPaused);
             }
         }
 
@@ -40,16 +45,19 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
-    public void ShowSettings()
+    public void ToggleSettings(bool state)
     {
-        MenuContainer.SetActive(false);
-        SettingsManager.instance.ToggleSettingsWindow(true);
-    }
-
-    public void HideSettings()
-    {
-        MenuContainer.SetActive(true);
-        SettingsManager.instance.ToggleSettingsWindow(false);
+        if (state)
+        {
+            MenuContainer.SetActive(false);
+            SettingsManager.instance.ToggleSettingsWindow(true);
+        }
+        else
+        {
+            MenuContainer.SetActive(true);
+            SettingsManager.instance.ToggleSettingsWindow(false);
+        }
+        isSettingsActive = state;
     }
 
     public void TogglePhotomode(bool state)
@@ -62,19 +70,20 @@ public class PauseMenu : MonoBehaviour
         isPhotomodeActive = state;
     }
 
-    void PauseGame()
+    public void TogglePause(bool state)
     {
-        isPaused = true;
-        Time.timeScale = 0;
-        MenuContainer.SetActive(true);
+        if (state)
+        {
+            isPaused = true;
+            Time.timeScale = 0;
+            MenuContainer.SetActive(true);
 
-        PlayerUI.current.ToggleUIElement(ui_element.all, false);
-    }
-
-    public void UnpauseGame()
-    {
-        HideSettings();
-        unpause = StartCoroutine(UnpauseWait());
+            PlayerUI.current.ToggleUIElement(ui_element.all, false);
+        }
+        else
+        {
+            unpause = StartCoroutine(UnpauseWait());
+        }
     }
 
     Coroutine unpause;
@@ -94,7 +103,14 @@ public class PauseMenu : MonoBehaviour
             Time.timeScale = 1;
             unpause = null;
 
-            if (Actor.PLAYERACTOR.isAlive && Actor.PLAYERACTOR != null) PlayerUI.current.ToggleUIElement(ui_element.all, true);
+            if (Actor.PLAYERACTOR.isAlive && Actor.PLAYERACTOR != null)
+            {
+                PlayerUI.current.ToggleUIElement(ui_element.gameplay, true);
+                PlayerUI.current.ToggleUIElement(ui_element.controls, true);
+                PlayerUI.current.ToggleUIElement(ui_element.stats, true);
+                PlayerUI.current.ToggleUIElement(ui_element.actionlog, true);
+                PlayerUI.current.ToggleUIElement(ui_element.messages, true);
+            }
         }
     }
 

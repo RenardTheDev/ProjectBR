@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1105 &110500000
+HumanTemplate:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Human Template
+  m_BoneTemplate:
+    Chest: mixamorig_Spine1
+    Head: mixamorig_Head
+    Hips: mixamorig_Hips
+    Left Index Distal: index_l_3
+    Left Index Intermediate: index_l_2
+    Left Index Proximal: index_l_1
+    Left Little Distal: little_l_3
+    Left Little Intermediate: little_l_2
+    Left Little Proximal: little_l_1
+    Left Middle Distal: middle_l_3
+    Left Middle Intermediate: middle_l_2
+    Left Middle Proximal: middle_l_1
+    Left Ring Distal: ring_l_3
+    Left Ring Intermediate: ring_l_2
+    Left Ring Proximal: ring_l_1
+    Left Thumb Distal: thumb_l_3
+    Left Thumb Intermediate: thumb_l_2
+    Left Thumb Proximal: thumb_l_1
+    LeftFoot: mixamorig_LeftFoot
+    LeftHand: mixamorig_LeftHand
+    LeftLowerArm: mixamorig_LeftForeArm
+    LeftLowerLeg: mixamorig_LeftLeg
+    LeftShoulder: mixamorig_LeftShoulder
+    LeftToes: mixamorig_LeftToeBase
+    LeftUpperArm: mixamorig_LeftArm
+    LeftUpperLeg: mixamorig_LeftUpLeg
+    Neck: mixamorig_Neck
+    Right Index Distal: index_r_3
+    Right Index Intermediate: index_r_2
+    Right Index Proximal: index_r_1
+    Right Little Distal: little_r_3
+    Right Little Intermediate: little_r_2
+    Right Little Proximal: little_r_1
+    Right Middle Distal: middle_r_3
+    Right Middle Intermediate: middle_r_2
+    Right Middle Proximal: middle_r_1
+    Right Ring Distal: ring_r_3
+    Right Ring Intermediate: ring_r_2
+    Right Ring Proximal: ring_r_1
+    Right Thumb Distal: thumb_r_3
+    Right Thumb Intermediate: thumb_r_2
+    Right Thumb Proximal: thumb_r_1
+    RightFoot: mixamorig_RightFoot
+    RightHand: mixamorig_RightHand
+    RightLowerArm: mixamorig_RightForeArm
+    RightLowerLeg: mixamorig_RightLeg
+    RightShoulder: mixamorig_RightShoulder
+    RightToes: mixamorig_RightToeBase
+    RightUpperArm: mixamorig_RightArm
+    RightUpperLeg: mixamorig_RightUpLeg
+    Spine: mixamorig_Spine
+    UpperChest: mixamorig_Spine2

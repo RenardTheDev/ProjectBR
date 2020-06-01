@@ -229,7 +229,17 @@ public class PlayerUI : MonoBehaviour
         {
             if (playerInv != null)
             {
-
+                if (isInvOpen)
+                {
+                    ToggleUIElement(ui_element.inventory, false);
+                    ToggleUIElement(ui_element.controls, true);
+                }
+                else
+                {
+                    ToggleUIElement(ui_element.inventory, true);
+                    ToggleUIElement(ui_element.controls, false);
+                }
+                isInvOpen = !isInvOpen;
             }
         }
     }
@@ -568,14 +578,32 @@ public class PlayerUI : MonoBehaviour
                 ui_stats.SetActive(state);
                 break;
             case ui_element.inventory:
-                ui_inventory.SetActive(state);
+                ui_inventory.SetActive(state && isInvOpen);
                 break;
             case ui_element.controls:
-                ui_controls.SetActive(state);
+                ui_controls.SetActive(state && !isInvOpen);
                 break;
             case ui_element.messages:
                 ui_messages.SetActive(state);
                 break;
+                //---packs---
+            case ui_element.gameplay:
+                {
+                    ui_radar.SetActive(state);
+                    ui_damageIndicators.SetActive(state);
+                    ui_health.SetActive(state);
+                    ui_weapon.SetActive(state);
+                    ui_crosshair.SetActive(state);
+                    ui_hitmarker.SetActive(state);
+                    break;
+                }
+            /*case ui_element.info:
+                {
+                    ui_actionlog.SetActive(state);
+                    ui_stats.SetActive(state);
+                    ui_messages.SetActive(state);
+                    break;
+                }*/
             default:
                 break;
         }
@@ -639,7 +667,9 @@ public enum ui_element
     stats,
     inventory,
     controls,
-    messages
+    messages,
+
+    gameplay
 }
 
 [System.Serializable]

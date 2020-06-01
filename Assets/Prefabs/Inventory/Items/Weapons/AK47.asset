@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 049d2889ae02e39499e13dbdc115fd81, type: 3}
+  m_Name: AK47
+  m_EditorClassIdentifier: 
+  prefab_w: {fileID: 8695735231800095845, guid: 9e4120e41261b5c46a9bf77e7a06c8fc,
+    type: 3}
+  type: 1
+  weight: 5
+  canStack: 0
+  description: Simply reliable.
+  weapon: {fileID: 11400000, guid: 6716934635846a34bbf64a2849a84f5c, type: 2}
+  prefab_eq: {fileID: 2218609448374979306, guid: 3419dd96081bcc04bb36cdec45f449f9,
+    type: 3}

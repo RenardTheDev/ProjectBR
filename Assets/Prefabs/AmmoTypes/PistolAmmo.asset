@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c1cba022255dc74c91912af8c5147b5, type: 3}
+  m_Name: PistolAmmo
+  m_EditorClassIdentifier: 
+  Name: Pistol ammo
+  maxTravel: 1000
+  color: {r: 0.39215687, g: 0.6862745, b: 0.98039216, a: 1}
+  boxMat: {fileID: 2100000, guid: 7cd863c64d434f44a90fc782ddff3d20, type: 2}

@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9580b245c61770b42b3a6342004f2670, type: 3}
+  m_Name: deagle
+  m_EditorClassIdentifier: 
+  Name: Desert Eagle
+  type: 1
+  prefab: {fileID: 4532954637162832298, guid: 5974a913fa85983408050aa2fdf8331d, type: 3}
+  sfx_shot: {fileID: 8300000, guid: 63cac01e0168fdd42bc36cf2a3277cb3, type: 3}
+  sfx_chamber: {fileID: 8300000, guid: 5859f6d31d75efb4d945693b5c9f60e7, type: 3}
+  sfx_insert: {fileID: 8300000, guid: 5549123a9fffd9c41920f59400a9358e, type: 3}
+  sfx_remove: {fileID: 8300000, guid: 6e09ae62df9347d44a0fc9b74bd4fea0, type: 3}
+  icon: {fileID: -7337582166838380253, guid: f985ffe0bbebbc64293ba84d918c98e5, type: 3}
+  firingMode: 1
+  reloadMode: 0
+  clipSize: 7
+  fireRate: 120
+  muzzleSpeed: 442
+  spreading: 0
+  pelletSpreading: 0
+  aimFOV: 45
+  ammoType: {fileID: 11400000, guid: a8d7ae98949fad847a863d7736031654, type: 2}
+  damageMult: 1
+  caliberMass: 19
+  pellets: 1
+  hasScope: 0
+  adsOffset: {x: 0.15, y: 0.102, z: 0.2}
+  recoilPower: {x: 10, y: 4, z: 3}
+  recoilOffsetPower: {x: 0, y: 0, z: -0.1}
+  recoilAttack: 16
+  recoilDecay: 16
+  canCrouch: 1
+  speedCap: 6
+  useAim: 0
+  pitchShift: 0
+  bonePivot: 12
+  offset: {x: 0, y: 0, z: 0}
+  sprintPivot: 18
+  sprintOffset: {x: -0.4, y: -0.18, z: 0}
+  sprintAngle: {x: 0, y: 90, z: 90}
+  sprintHIK:
+  - 0
+  - 0
+  grip: 0
+  hPosition: {x: -0.05, y: 0.4, z: 0}
+  hRotation: {x: 90, y: 0, z: 0}
+  animRel_full: {fileID: 7400000, guid: 1c0d5def712c1ce4e898affb6e73ee6b, type: 2}
+  animRel_tactical: {fileID: 7400000, guid: 3779845cb853e5c4687ff6fe0d968fa0, type: 2}
+  animRel_Start: {fileID: 0}
+  animRel_Insert: {fileID: 0}
+  animRel_End: {fileID: 0}
+  animChamber: {fileID: 0}
+  animShot: {fileID: 7400000, guid: 9a5a2ce008f5f4348ad16a5579f121da, type: 2}
+  impact: 41.989998
+  damage: 83.979996
+  dps: 167.95999
