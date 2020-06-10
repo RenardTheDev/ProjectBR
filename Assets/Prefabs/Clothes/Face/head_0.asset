@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e058937703328e44c9e15a744279519a, type: 3}
   m_Name: head_0
   m_EditorClassIdentifier: 
-  name: head_0
-  clothMesh: {fileID: 3621554888825754127, guid: cb71e0b181fbc8c4a9a3e9f45f8448f3,
-    type: 3}
+  ClothName: _face_0
   originalSkin: {fileID: 8930721202458247839, guid: cb71e0b181fbc8c4a9a3e9f45f8448f3,
     type: 3}
   type: 5

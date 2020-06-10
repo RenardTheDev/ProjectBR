@@ -12,6 +12,8 @@ public class CustomizationMenu : MonoBehaviour
 {
     ClothesConfig playerClothes = new ClothesConfig();
 
+    Canvas canvas;
+
     public ActorClothing actor;
     public Animator anim;
 
@@ -27,28 +29,39 @@ public class CustomizationMenu : MonoBehaviour
 
     public Dictionary<Button, ClothingDATA> items;
 
+    private void Awake()
+    {
+        canvas = GetComponent<Canvas>();
+    }
+
     private void Start()
     {
-        viewPort.parent.parent.gameObject.SetActive(true);
+        actor = GameObject.FindGameObjectWithTag("Doll").GetComponent<ActorClothing>();
+        if (actor!=null)
+        {
+            anim = actor.GetComponent<Animator>();
+        }
+
+        viewPort.gameObject.SetActive(false);
         UpdateClothesUI();
-        viewPort.parent.parent.gameObject.SetActive(false);
+        viewPort.gameObject.SetActive(true);
 
         LoadCustomization();
     }
 
-    public void OpenCustomization()
+    private void Update()
     {
-        anim.SetBool("customization", true);
-    }
-
-    public void CloseCustomization()
-    {
-        anim.SetBool("customization", false);
+        if (anim != null)
+        {
+            anim.SetBool("customization", canvas.enabled);
+        }
     }
 
     public void UpdateClothesUI()
     {
         ClearItemsFromList();
+
+        Debug.Log("cl_dict.Count = " + ClothesManager.current.cl_dict.Count);
 
         if (Application.isEditor) ClothesManager.current = FindObjectOfType<ClothesManager>();
 

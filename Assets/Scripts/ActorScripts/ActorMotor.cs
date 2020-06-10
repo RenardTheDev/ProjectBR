@@ -81,7 +81,7 @@ public class ActorMotor : MonoBehaviour
 
         dirLock_fade = Mathf.Lerp(dirLock_fade, (sprinting || !actWeapon.isArmed) ? 1f : 0f, Time.deltaTime * 3);
 
-        if (actWeapon.currWData.type == WeaponType.Melee)
+        if (actWeapon.currWData != null && actWeapon.currWData.type == WeaponType.Melee)
         {
             if (sprinting && inpDirection.magnitude < 0.1f)
             {

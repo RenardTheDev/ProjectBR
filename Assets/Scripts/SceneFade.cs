@@ -49,6 +49,8 @@ public class SceneFade : MonoBehaviour
         if (IN_Coroutine == null) IN_Coroutine = StartCoroutine(FadeInSync(scene.sceneBuildID));
 
         waitForInput = true;
+
+        GameManager.current.gameState = GameState.loading;
     }
 
     public void FadeToMenu(float transitionTime = 1.0f)
@@ -63,6 +65,8 @@ public class SceneFade : MonoBehaviour
         if (IN_Coroutine == null) IN_Coroutine = StartCoroutine(FadeInSync(0));
 
         waitForInput = false;
+
+        GameManager.current.gameState = GameState.loading;
     }
 
     private void Update()
@@ -129,6 +133,7 @@ public class SceneFade : MonoBehaviour
             {
                 yield return null;
             }
+            GameManager.current.gameState = GameState.gameplay;
         }
 
         SLoad_Coroutine = null;

@@ -4,7 +4,20 @@ using UnityEngine;
 
 public class ActorInventory : MonoBehaviour
 {
+    Actor actor;
     public InventoryObject inventory;
+
+    public bool generateUniqContainer = true;
+
+    private void Awake()
+    {
+        actor = GetComponent<Actor>();
+
+        if (generateUniqContainer)
+        {
+            inventory = new InventoryObject();
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -17,7 +30,7 @@ public class ActorInventory : MonoBehaviour
 
     public void PickUpItem(Item _item)
     {
-        inventory.AddItem(_item.item, 1);
+        inventory.AddItem(_item.item, _item.amount);
         Destroy(_item.gameObject);
     }
 

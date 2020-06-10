@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-[CreateAssetMenu(fileName = "New Inventory", menuName = "Scriptables/Inventory/Container")]
-public class InventoryObject : ScriptableObject
+[System.Serializable]
+public class InventoryObject
 {
     public List<InventorySlot> container = new List<InventorySlot>();
     public void AddItem(ItemObject _item, int _amount)

@@ -32,15 +32,7 @@ public class ClothesManager : MonoBehaviour
 
     public void GetClothesAssets()
     {
-        //clothes = new List<ClothingDATA>();
         cl_dict = new Dictionary<ClothingType, List<ClothingDATA>>();
-
-        /*string[] guids = AssetDatabase.FindAssets("t:ClothingDATA");
-
-        foreach (string guid in guids)
-        {
-            clothes.Add((ClothingDATA)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(guid), typeof(ClothingDATA)));
-        }*/
 
         for (int i = 0; i < clothes.Count; i++)
         {

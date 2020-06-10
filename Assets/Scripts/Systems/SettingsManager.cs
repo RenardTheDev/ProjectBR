@@ -44,7 +44,6 @@ public class SettingsManager : MonoBehaviour
 
         if (!instance)
         {
-            DontDestroyOnLoad(gameObject);
             instance = this;
 
             SettingsWindow = transform.GetChild(0).gameObject;
@@ -71,10 +70,6 @@ public class SettingsManager : MonoBehaviour
 
             rd_increase.onClick.AddListener(() => { RenderDistanceChange(100); });
             rd_decrease.onClick.AddListener(() => { RenderDistanceChange(-100); });
-        }
-        else
-        {
-            Destroy(gameObject);
         }
 
         settings = new GlobalSettings();

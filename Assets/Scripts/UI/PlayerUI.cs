@@ -9,18 +9,11 @@ public class PlayerUI : MonoBehaviour
     public GameObject[] ui_elements;
 
     //---Specific parts---
-    public GameObject ui_radar;
     public GameObject ui_damageIndicators;
     public GameObject ui_health;
     public GameObject ui_weapon;
     public GameObject ui_crosshair;
     public GameObject ui_hitmarker;
-    public GameObject ui_actionlog;
-    public GameObject ui_stats;
-
-    public GameObject ui_inventory;
-    public GameObject ui_controls;
-    public GameObject ui_messages;
 
     Camera mainCamera;
 
@@ -131,7 +124,7 @@ public class PlayerUI : MonoBehaviour
             {
                 if (item.activeSelf)
                 {
-                    ToggleUIElement(ui_element.all, false);
+                    ToggleUIElement(player_ui_element.all, false);
                     break;
                 }
             }
@@ -188,11 +181,10 @@ public class PlayerUI : MonoBehaviour
 
         if (hm_base.activeSelf)
         {
-            hm_fill = Mathf.MoveTowards(hm_fill, 1f, 2f * (Time.deltaTime / hm_scrTime));
+            hm_fill = Mathf.MoveTowards(hm_fill, 0, Time.deltaTime / hm_scrTime);
             for (int i = 0; i < hm_parts.Length; i++)
             {
-                hm_parts[i].fillOrigin = hm_fill > 0 ? 1 : 0;
-                hm_parts[i].fillAmount = fillCurve.Evaluate(1f - Mathf.Abs(hm_fill));
+                hm_parts[i].fillAmount = fillCurve.Evaluate(hm_fill);
             }
         }
 
@@ -222,25 +214,6 @@ public class PlayerUI : MonoBehaviour
         else
         {
             pickupHintBase.gameObject.SetActive(false);
-        }
-
-        //---INVENTORY---
-        if (Controls.inventory.state == bindState.down)
-        {
-            if (playerInv != null)
-            {
-                if (isInvOpen)
-                {
-                    ToggleUIElement(ui_element.inventory, false);
-                    ToggleUIElement(ui_element.controls, true);
-                }
-                else
-                {
-                    ToggleUIElement(ui_element.inventory, true);
-                    ToggleUIElement(ui_element.controls, false);
-                }
-                isInvOpen = !isInvOpen;
-            }
         }
     }
 
@@ -364,7 +337,7 @@ public class PlayerUI : MonoBehaviour
                 for (int i = 0; i < hm_parts.Length; i++)
                 {
                     hm_parts[i].color = Color.white;
-                    hm_fill = -1;
+                    hm_fill = 1;
                 }
 
                 if (hm_coroutine != null) StopCoroutine(hm_coroutine);
@@ -392,7 +365,7 @@ public class PlayerUI : MonoBehaviour
     {
         if (actor == playerActor)
         {
-            ToggleUIElement(ui_element.all, false);
+            ToggleUIElement(player_ui_element.all, false);
         }
         else
         {
@@ -401,7 +374,7 @@ public class PlayerUI : MonoBehaviour
             for (int i = 0; i < hm_parts.Length; i++)
             {
                 hm_parts[i].color = Color.red;
-                hm_fill = -1;
+                hm_fill = 1;
             }
 
             if (hm_coroutine != null) StopCoroutine(hm_coroutine);
@@ -414,7 +387,7 @@ public class PlayerUI : MonoBehaviour
         if (actor != playerActor) return;
 
         hpBar.fillAmount = playerActor.Health / playerActor.maxHealth;
-        ToggleUIElement(ui_element.all, true);
+        ToggleUIElement(player_ui_element.all, true);
     }
 
     private void OnSlotChanged(int oldSlot, int newSlot, WeaponSlot[] slotInfo)
@@ -432,7 +405,7 @@ public class PlayerUI : MonoBehaviour
 
         if (playerWeapon.currWData.type == WeaponType.Melee)
         {
-            ToggleUIElement(ui_element.weapon, false);
+            ToggleUIElement(player_ui_element.weapon, false);
         }
     }
 
@@ -478,7 +451,7 @@ public class PlayerUI : MonoBehaviour
         playerEvents.onWeaponShellInsert += OnWeaponShellInserted;
         playerEvents.onWeaponChambered += OnWeaponChambered;
 
-        ToggleUIElement(ui_element.all, true);
+        ToggleUIElement(player_ui_element.all, true);
     }
 
     public void ClearPlayer()
@@ -495,7 +468,7 @@ public class PlayerUI : MonoBehaviour
         playerMotor = null;
         playerWeapon = null;
 
-        ToggleUIElement(ui_element.all, false);
+        ToggleUIElement(player_ui_element.all, false);
     }
 
     void UpdateWeaponInfoPanel()
@@ -543,67 +516,31 @@ public class PlayerUI : MonoBehaviour
         weaponIcon_second.transform.parent.gameObject.SetActive(false);
     }
 
-    public void ToggleUIElement(ui_element element, bool state)
+    public void ToggleUIElement(player_ui_element element, bool state)
     {
         switch (element)
         {
-            case ui_element.all:
+            case player_ui_element.all:
                 foreach (var item in ui_elements)
                 {
                     item.SetActive(state);
                 }
                 break;
-            case ui_element.radar:
-                ui_radar.SetActive(state);
-                break;
-            case ui_element.damage:
+            case player_ui_element.damage:
                 ui_damageIndicators.SetActive(state);
                 break;
-            case ui_element.health:
+            case player_ui_element.health:
                 ui_health.SetActive(state);
                 break;
-            case ui_element.weapon:
+            case player_ui_element.weapon:
                 ui_weapon.SetActive(state);
                 break;
-            case ui_element.crosshair:
+            case player_ui_element.crosshair:
                 ui_crosshair.SetActive(state);
                 break;
-            case ui_element.hitmarker:
+            case player_ui_element.hitmarker:
                 ui_hitmarker.SetActive(state);
                 break;
-            case ui_element.actionlog:
-                ui_actionlog.SetActive(state);
-                break;
-            case ui_element.stats:
-                ui_stats.SetActive(state);
-                break;
-            case ui_element.inventory:
-                ui_inventory.SetActive(state && isInvOpen);
-                break;
-            case ui_element.controls:
-                ui_controls.SetActive(state && !isInvOpen);
-                break;
-            case ui_element.messages:
-                ui_messages.SetActive(state);
-                break;
-                //---packs---
-            case ui_element.gameplay:
-                {
-                    ui_radar.SetActive(state);
-                    ui_damageIndicators.SetActive(state);
-                    ui_health.SetActive(state);
-                    ui_weapon.SetActive(state);
-                    ui_crosshair.SetActive(state);
-                    ui_hitmarker.SetActive(state);
-                    break;
-                }
-            /*case ui_element.info:
-                {
-                    ui_actionlog.SetActive(state);
-                    ui_stats.SetActive(state);
-                    ui_messages.SetActive(state);
-                    break;
-                }*/
             default:
                 break;
         }
@@ -654,22 +591,14 @@ public class PlayerUI : MonoBehaviour
     }
 }
 
-public enum ui_element
+public enum player_ui_element
 {
     all,
-    radar,
     damage,
     health,
     weapon,
     crosshair,
-    hitmarker,
-    actionlog,
-    stats,
-    inventory,
-    controls,
-    messages,
-
-    gameplay
+    hitmarker
 }
 
 [System.Serializable]

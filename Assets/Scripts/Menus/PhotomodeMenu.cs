@@ -80,14 +80,17 @@ public class PhotomodeMenu : MonoBehaviour
     public float sens;
     private void Update()
     {
-        cm_Trans.Translate(new Vector3(joy.InputVector.x, 0, joy.InputVector.y) * Time.unscaledDeltaTime * flySpeed);
-        look.x -= field.TouchDist.y * sens;
-        look.y += field.TouchDist.x * sens;
+        if (cm_Trans != null)
+        {
+            cm_Trans.Translate(new Vector3(joy.InputVector.x, 0, joy.InputVector.y) * Time.unscaledDeltaTime * flySpeed);
+            look.x -= field.TouchDist.y * sens;
+            look.y += field.TouchDist.x * sens;
 
-        look.x = Mathf.Clamp(look.x, -89, 89);
-        look.y = Mathf.Repeat(look.y, 360);
+            look.x = Mathf.Clamp(look.x, -89, 89);
+            look.y = Mathf.Repeat(look.y, 360);
 
-        cm_Trans.rotation = Quaternion.Euler(look);
+            cm_Trans.rotation = Quaternion.Euler(look);
+        }
     }
 
     Camera cam;

@@ -69,6 +69,8 @@ public class CharacterManager : MonoBehaviour
             CameraControllerBase.current.SetActorTarget(cp.actor);
 
             cp.actor.MarkAsPlayer(true);
+
+            cp.actor.ActorName = "Player";
         }
         else
         {
@@ -80,6 +82,8 @@ public class CharacterManager : MonoBehaviour
             cp.clothing.RandomizeClothes();
 
             cp.actor.MarkAsPlayer(false);
+
+            cp.actor.ActorName = "TheDude#" + Random.Range(0, 1000).ToString("0000");
         }
 
         cp.gObj.transform.position = position;

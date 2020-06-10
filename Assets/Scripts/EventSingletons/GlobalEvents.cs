@@ -9,7 +9,15 @@ public class GlobalEvents : MonoBehaviour
 
     private void Awake()
     {
-        current = this;
+        if (current == null)
+        {
+            current = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     public event Action<Actor,Damage> onActorGetHit;

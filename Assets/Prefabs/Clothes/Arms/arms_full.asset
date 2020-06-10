@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e058937703328e44c9e15a744279519a, type: 3}
   m_Name: arms_full
   m_EditorClassIdentifier: 
-  name: Arms full
-  clothMesh: {fileID: 4300014, guid: cb71e0b181fbc8c4a9a3e9f45f8448f3, type: 3}
+  ClothName: _armFiller_full
   originalSkin: {fileID: 13700002, guid: cb71e0b181fbc8c4a9a3e9f45f8448f3, type: 3}
   type: 4
+  arms: {fileID: 0}

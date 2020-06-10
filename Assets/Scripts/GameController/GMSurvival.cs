@@ -18,16 +18,14 @@ public class GMSurvival : MonoBehaviour
     public int money;
 
     //---UI Stats---
-    public Text label_wave;
+    /*public Text label_wave;
     public Text label_kills;
-    public Text label_score;
+    public Text label_score;*/
 
     //---Controller data---
     public int Wave;
     public List<Actor> enemies = new List<Actor>();
     public int enemiesLeft { get => enemies.Count; }
-
-    //---UI---
 
     private void Awake()
     {
@@ -45,13 +43,18 @@ public class GMSurvival : MonoBehaviour
     Coroutine cor_gameStart;
     IEnumerator GameStart()
     {
-        label_wave.text = "Wave: <color=#FF9632>" + Wave + "</color>";
+        //label_wave.text = "Wave: <color=#FF9632>" + Wave + "</color>";
+
+        while (GameManager.current.gameState == GameState.loading)
+        {
+            yield return new WaitForEndOfFrame();
+        }
 
         CameraControllerBase.current.ChangeToState("Cinematic", 0);
 
         CharacterManager.current.SpawnCharacter(PlayerSpawner.position, PlayerSpawner.rotation, true);
-        PlayerUI.current.ToggleUIElement(ui_element.all, false);
-        PlayerUI.current.ToggleUIElement(ui_element.messages, true);
+        GameUI.current.DisableAllUICanvas();
+        GameUI.current.EnableUICanvas("msg");
 
         yield return new WaitForSeconds(2f);
 
@@ -61,10 +64,9 @@ public class GMSurvival : MonoBehaviour
 
         yield return new WaitForSeconds(5f);
 
-        PlayerUI.current.ToggleUIElement(ui_element.gameplay, true);
-        PlayerUI.current.ToggleUIElement(ui_element.controls, true);
-        PlayerUI.current.ToggleUIElement(ui_element.stats, true);
-        PlayerUI.current.ToggleUIElement(ui_element.actionlog, true);
+        GameUI.current.EnableUICanvas("scr_effect");
+        GameUI.current.EnableUICanvas("player");
+        GameUI.current.EnableUICanvas("controls");
         StartCoroutine(WavePreparation());
     }
 
@@ -132,7 +134,8 @@ public class GMSurvival : MonoBehaviour
     {
         PlayerUI.current.ShowBigCenterMSG("Wave complete", col_win, "", 2, 0.5f);
 
-        PlayerUI.current.ToggleUIElement(ui_element.gameplay, false);
+        GameUI.current.DisableUICanvas("player");
+        GameUI.current.DisableUICanvas("inv");
         CameraControllerBase.current.ChangeToState("waveEnd_0", 0);
         yield return new WaitForSeconds(0.25f);
 
@@ -141,13 +144,11 @@ public class GMSurvival : MonoBehaviour
         if (aw.isArmed) aw.currWEntity.TryToReload();
 
         yield return new WaitForSeconds(3.75f);
-        PlayerUI.current.ToggleUIElement(ui_element.gameplay, true);
-        PlayerUI.current.ToggleUIElement(ui_element.controls, true);
+        GameUI.current.EnableUICanvas("player");
+        if (GameUI.current.invOpened) GameUI.current.EnableUICanvas("inv");
 
         Wave++;
-        label_wave.text = "Wave: <color=#FF9632>" + Wave + "</color>";
-        /*if (cor_gameMsg != null) StopCoroutine(cor_gameMsg);
-        cor_gameMsg = StartCoroutine(WavePreparation());*/
+        //label_wave.text = "Wave: <color=#FF9632>" + Wave + "</color>";
     }
 
     Coroutine cor_gameOver;
@@ -184,7 +185,7 @@ public class GMSurvival : MonoBehaviour
 
     private void Update()
     {
-        if (action.Count > 0) action.RemoveAll(x => Time.time - x.updated > reportTimeLength);
+        /*if (action.Count > 0) action.RemoveAll(x => Time.time - x.updated > reportTimeLength);
 
         action_log.text = "";
 
@@ -212,7 +213,7 @@ public class GMSurvival : MonoBehaviour
                         break;
                     }
             }
-        }
+        }*/
     }
 
     public void ActionLog_Damage(Actor victim, Damage damage, bool isKill)
@@ -253,8 +254,8 @@ public class GMSurvival : MonoBehaviour
             action.Add(new ActionRecordItem(ActionType.sum, Time.time, new ActionRecordSum(scoreCalc)));
         }
 
-        label_kills.text = "Kills: <color=#FA4B32>" + kills + "</color>";
-        label_score.text = "Score: <color=#00AF00>" + score.ToString("0") + "</color>";
+        //label_kills.text = "Kills: <color=#FA4B32>" + kills + "</color>";
+        //label_score.text = "Score: <color=#00AF00>" + score.ToString("0") + "</color>";
     }
 
 
@@ -265,7 +266,7 @@ public class GMSurvival : MonoBehaviour
 
     [Header("Action log")]
     public Text action_log;
-    public float reportTimeLength = 10f;
+    public float reportTimeLength = 5f;
     public List<ActionRecordItem> action = new List<ActionRecordItem>();
 }
 

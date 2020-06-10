@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/survival_04_small.unity
     guid: 8c8188e60eb98fd42b53ec3bf05c21d9
+  - enabled: 1
+    path: Assets/Scenes/survival_04_freeroam.unity
+    guid: cf5ddb451fc6cd34eb97f0fa7b3eeaa9
   m_configObjects: {}
