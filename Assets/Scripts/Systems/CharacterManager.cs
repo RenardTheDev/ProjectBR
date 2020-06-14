@@ -74,7 +74,6 @@ public class CharacterManager : MonoBehaviour
         }
         else
         {
-            cp.look.aa_Power = 0.0f;
             if (cp.agent == null) cp.agent = cp.gObj.AddComponent<NavMeshAgent>();
             ConfigNavMeshAgent(cp.agent);
             cp.agent.Warp(position);

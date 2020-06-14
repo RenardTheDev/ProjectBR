@@ -141,7 +141,7 @@ public class GMSurvival : MonoBehaviour
 
         Actor.PLAYERACTOR.GetComponent<ActorMotor>().ChangeAimState(false);
         ActorWeapon aw = Actor.PLAYERACTOR.GetComponent<ActorWeapon>();
-        if (aw.isArmed) aw.currWEntity.TryToReload();
+        //if (aw.isArmed) aw.currWEntity.TryToReload();
 
         yield return new WaitForSeconds(3.75f);
         GameUI.current.EnableUICanvas("player");

@@ -31,6 +31,38 @@ public class InventoryObject
             container.Add(new InventorySlot(_item, 1));
         }
     }
+
+    public void RemoveItem(ItemObject _item, int _amount)
+    {
+        for (int i = 0; i < container.Count; i++)
+        {
+            if (container[i].item == _item)
+            {
+                container[i].RemoveAmount(_amount);
+                if (container[i].amount <= 0)
+                {
+                    container.RemoveAt(i);
+                }
+                break;
+            }
+        }
+    }
+
+    public int GetQuantity(ItemObject _item)
+    {
+        int value = 0;
+
+        for (int i = 0; i < container.Count; i++)
+        {
+            if (container[i].item == _item)
+            {
+                value += container[i].amount;
+                if (_item.canStack) break;
+            }
+        }
+
+        return value;
+    }
 }
 
 [System.Serializable]
@@ -48,5 +80,10 @@ public class InventorySlot
     public void AddAmount(int value)
     {
         amount += value;
+    }
+
+    public void RemoveAmount(int value)
+    {
+        amount -= value;
     }
 }

@@ -147,17 +147,6 @@ public class ActorRagdoll : MonoBehaviour
         ToggleRagdoll(true);
     }
 
-    Coroutine weapDropCoroutine;
-    IEnumerator DelayedWeaponDrop(float delay)
-    {
-        actWeapon.currWEntity.StopAnimations();
-        actWeapon.ReparentOnAnimDeath(anim.GetBoneTransform(HumanBodyBones.RightHand));
-
-        yield return new WaitForSeconds(delay);
-
-        actWeapon.DropAllWeapons();
-    }
-
     float animChance;
     bool useAnimDeath=false;
     float deathAnimBlend = 0.4f;
@@ -172,8 +161,6 @@ public class ActorRagdoll : MonoBehaviour
         if (!useAnimDeath)
         {
             ChangeToRagdollWithPush(damage.direction * damage.weapon.impact, damage.point, damage.bone);
-
-            weapDropCoroutine = StartCoroutine(DelayedWeaponDrop(Random.value * 1f));
         }
         else
         {
@@ -188,10 +175,7 @@ public class ActorRagdoll : MonoBehaviour
                 anim.CrossFadeInFixedTime("death_front_" + dNum, deathAnimBlend);
             }
 
-            weapDropCoroutine = StartCoroutine(DelayedWeaponDrop(0.1f + Random.value * 0.2f));
             delayedRagdoll = StartCoroutine(DelayedRagdoll(deathAnimBlend + Random.value * (1.75f - deathAnimBlend)));
-
-            actWeapon.ReparentOnAnimDeath(anim.GetBoneTransform(HumanBodyBones.RightHand));
         }
     }
 
@@ -202,7 +186,6 @@ public class ActorRagdoll : MonoBehaviour
         ToggleRagdoll(false);
         anim.Play("Stance_rifle");
 
-        if (weapDropCoroutine != null) StopCoroutine(weapDropCoroutine);
         if (delayedRagdoll != null) StopCoroutine(delayedRagdoll);
     }
 }

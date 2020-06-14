@@ -69,7 +69,7 @@ public class AIController : MonoBehaviour
     {
         if (actor.isPlayer)
         {
-            List<WeaponDATA> currentWeapons = new List<WeaponDATA>();
+            /*List<WeaponDATA> currentWeapons = new List<WeaponDATA>();
             var paw = actor.GetComponent<ActorWeapon>();
             for (int i = 0; i < paw.weapon.Length; i++)
             {
@@ -86,7 +86,7 @@ public class AIController : MonoBehaviour
                 else if (y == null) return 1;
                 else return y.type.CompareTo(x.type);
             });
-            actor.standardWeapon = currentWeapons.ToArray();
+            actor.standardWeapon = currentWeapons.ToArray();*/
 
             StartCoroutine(SlowTime(3f));
         }
@@ -369,7 +369,7 @@ public class AIController : MonoBehaviour
 
     void BotShoot(Bot bot, bool state)
     {
-        bot.weapon.currWEntity.inp_trigger = state;
+        //bot.weapon.currWEntity.inp_trigger = state;
     }
 
     Vector3 PathToMovement(NavMeshPath path)

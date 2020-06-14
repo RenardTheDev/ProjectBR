@@ -4337,7 +4337,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54dfb7e842b0b734cbf2838abe33a241, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventory: {fileID: 0}
+  inventory:
+    container: []
+  generateUniqContainer: 1
 --- !u!114 &9196441056570324391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4390,31 +4392,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lookAt: {x: 0, y: 0, z: 0}
   aimEuler: {x: 0, y: 0, z: 0}
-  HeadBone: {fileID: 2737118603306328414}
   pitch: 0
   heading: 0
   yaw: 0
-  aimAssist: {x: 0, y: 0, z: 0, w: 0}
-  aa_lastTarget: {fileID: 0}
-  aa_Actor: {fileID: 0}
-  aa_Radius: 0.3
-  aa_Power: 0
-  aa_mask:
-    serializedVersion: 2
-    m_Bits: 257
-  recoil_raw: {x: 0, y: 0, z: 0}
-  recoil: {x: 0, y: 0, z: 0}
-  recoil_offset_raw: {x: 0, y: 0, z: 0}
-  recoil_offset: {x: 0, y: 0, z: 0}
-  recoilDecay: 0
-  recoilAttack: 0
-  base_offset: {x: 0, y: 0.5, z: 0}
-  side_offset: {x: 0.45, y: 0.3, z: -1.75}
-  side_offset_aim: {x: 0.4, y: 0.25, z: -2.25}
-  hips_offset: {x: 0, y: 0, z: 0}
-  standardFov: 60
-  zoomSpeed: 5
-  aim_blend: 0
 --- !u!114 &6805610069425060690
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4432,14 +4412,24 @@ MonoBehaviour:
   runSpeed: 4
   sprintSpeed: 6
   currentSpeed: 0
+  airVelocity: {x: 0, y: 0, z: 0}
+  airMomentum: 0
+  maxFallSpeed: -50
   crouching: 0
   sprinting: 0
   aiming: 0
+  grounded: 0
   dirLock_fade: 0
   inpDirection: {x: 0, y: 0, z: 0}
   moveDir: {x: 0, y: 0, z: 0}
   turnSmoothTime: 0.1
   turnSmoothVelocity: 0
+  fall2Roll_threshold: 15
+  fall2Hard_threshold: 10
+  animate:
+  - 0
+  - 0
+  - 0
 --- !u!114 &982267757487006557
 MonoBehaviour:
   m_ObjectHideFlags: 0

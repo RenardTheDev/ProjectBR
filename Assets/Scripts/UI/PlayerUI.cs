@@ -77,7 +77,6 @@ public class PlayerUI : MonoBehaviour
         current = this;
 
         mainCamera = Camera.main;
-        StartCoroutine(CheckForGunPickUps());
 
         wPanelTrans = weaponPanel.GetComponent<RectTransform>();
 
@@ -189,7 +188,7 @@ public class PlayerUI : MonoBehaviour
         }
 
         //---WEAPON---
-        if (crosshair.gameObject.activeSelf)
+        /*if (crosshair.gameObject.activeSelf)
         {
             if (playerWeapon.isArmed)
             {
@@ -204,99 +203,7 @@ public class PlayerUI : MonoBehaviour
         else
         {
             if (playerWeapon.isArmed && !(playerMotor.aiming && playerWeapon.currWData.hasScope)) crosshair.gameObject.SetActive(true);
-        }
-
-        if (playerActor != null && weaponToPickUp != null && Time.time > lastPickup + 1)
-        {
-            if (Controls.pickup.state == bindState.down) PlayerPickUpWeapon();
-            pickupHintBase.gameObject.SetActive(true);
-        }
-        else
-        {
-            pickupHintBase.gameObject.SetActive(false);
-        }
-    }
-
-    public LayerMask weaponMask;
-    public float pickupRadius = 3f;
-    List<WeaponEntity> foundPicks;
-    WeaponEntity weaponToPickUp;
-    IEnumerator CheckForGunPickUps()
-    {
-        ProcessPickups();
-
-        yield return new WaitForSecondsRealtime(0.2f);
-        StartCoroutine(CheckForGunPickUps());
-    }
-
-    void ProcessPickups()
-    {
-        if (playerActor != null && Time.time > lastPickup + 1)
-        {
-            if (foundPicks != null)
-            {
-                foundPicks.Clear();
-            }
-            else
-            {
-                foundPicks = new List<WeaponEntity>();
-            }
-
-            var picks = new List<Collider>(Physics.OverlapSphere(playerActor.transform.position, pickupRadius, weaponMask));
-
-            foreach (var item in picks)
-            {
-                foundPicks.Add(item.GetComponentInParent<WeaponEntity>());
-            }
-
-            if (foundPicks.Count == 0)
-            {
-                pickupHintBase.gameObject.SetActive(false);
-                weaponToPickUp = null;
-                return;
-            }
-
-            foundPicks.RemoveAll(x => !x.isDropped);
-
-            if(foundPicks.Count == 0)
-            {
-                pickupHintBase.gameObject.SetActive(false);
-                weaponToPickUp = null;
-                return;
-            }
-
-            for (int pw = 0; pw < playerWeapon.weapon.Length; pw++)
-            {
-                foundPicks.RemoveAll(x => x.data == playerWeapon.GetEntity(pw));
-            }
-            //foundPicks.RemoveAll(x => x.clip == 0);
-
-            if (foundPicks.Count > 0)
-            {
-                pickupHintBase.gameObject.SetActive(true);
-
-                if (foundPicks.Count > 1)
-                    foundPicks.Sort((x, y) => Vector3.Distance(
-                        x.labelPivot.position, playerActor.transform.position + Vector3.up).CompareTo(
-                        Vector3.Distance(y.labelPivot.position, playerActor.transform.position + Vector3.up)));
-
-                weaponToPickUp = foundPicks[0];
-                pickupName.text = weaponToPickUp.data.Name;
-
-                pickupNamePlate.sizeDelta = new Vector2(pickupName.preferredWidth + 20f, pickupNamePlate.sizeDelta.y);
-            }
-            else
-            {
-                pickupHintBase.gameObject.SetActive(false);
-                weaponToPickUp = null;
-            }
-        }
-    }
-
-    void PlayerPickUpWeapon()
-    {
-        playerWeapon.PickupWeapon(weaponToPickUp);
-        lastPickup = Time.time;
+        }*/
     }
 
     private void OnActorGetHit(Actor actor, Damage damage)
@@ -392,9 +299,9 @@ public class PlayerUI : MonoBehaviour
 
     private void OnSlotChanged(int oldSlot, int newSlot, WeaponSlot[] slotInfo)
     {
-        weaponPanel.SetActive(slotInfo.Length > 0 && slotInfo[newSlot].slotType != WeaponType.Melee);
+        weaponPanel.SetActive(slotInfo.Length > 0 && slotInfo[newSlot].entity.data.type != WeaponType.Melee);
 
-        if (slotInfo.Length == 0) return;
+        /*if (slotInfo.Length == 0) return;
 
         if (!playerWeapon.IsEntityEmpty(oldSlot))
             ShowSecondWeapIcon(playerWeapon.GetWData(oldSlot).icon);
@@ -406,7 +313,7 @@ public class PlayerUI : MonoBehaviour
         if (playerWeapon.currWData.type == WeaponType.Melee)
         {
             ToggleUIElement(player_ui_element.weapon, false);
-        }
+        }*/
     }
 
     private void OnWeaponShot(WeaponDATA data)
@@ -475,7 +382,7 @@ public class PlayerUI : MonoBehaviour
     {
         if (playerActor == null) return;
 
-        currWeapon = playerWeapon.currWEntity;
+        /*currWeapon = playerWeapon.currWEntity;
 
         if (currWeapon != null)
         {
@@ -500,7 +407,7 @@ public class PlayerUI : MonoBehaviour
             }
 
             clip.color = (currWeapon.chambered && currWeapon.clip > 0) ? activeClip : emptyClip;
-        }
+        }*/
     }
 
     void ShowSecondWeapIcon(Sprite icon)
@@ -546,13 +453,13 @@ public class PlayerUI : MonoBehaviour
         }
 
         //--- conditional ---
-        if (playerWeapon != null && playerWeapon.currWData != null)
+        /*if (playerWeapon != null && playerWeapon.currWData != null)
         {
             if (playerWeapon.currWData.type == WeaponType.Melee)
             {
                 ui_weapon.SetActive(false);
             }
-        }
+        }*/
     }
 
     [Header("Game message")]

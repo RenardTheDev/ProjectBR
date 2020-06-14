@@ -11,4 +11,5 @@ public class AmmoDATA : ScriptableObject
 
     public Color color;
     public Material boxMat;
+    public AmmoObject invItem;
 }

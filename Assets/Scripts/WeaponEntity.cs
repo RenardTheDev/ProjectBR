@@ -110,7 +110,7 @@ public class WeaponEntity : MonoBehaviour
                 }
                 else
                 {
-                    if (handler.ammo[data.ammoType] > 0 && _reloadCoroutine == null && Time.time > lastShot + getFireRate())
+                    if (/*handler.GetCurrentAmmo() > 0 &&*/ _reloadCoroutine == null && Time.time > lastShot + getFireRate())
                     {
                         _reloadCoroutine = StartCoroutine(_reload());
                     }
@@ -131,7 +131,7 @@ public class WeaponEntity : MonoBehaviour
 
     public void TryToReload()
     {
-        if (clip < getClipSize() && handler.ammo[data.ammoType] > 0 && _chamberCoroutine == null && _reloadCoroutine == null)
+        if (clip < getClipSize() /*&& handler.GetCurrentAmmo() > 0*/ && _chamberCoroutine == null && _reloadCoroutine == null)
         {
             _reloadCoroutine = StartCoroutine(_reload());
         }
@@ -257,16 +257,18 @@ public class WeaponEntity : MonoBehaviour
             else
             {
                 int diff = getClipSize() - clip;
-                if (handler.ammo[data.ammoType] > diff)
+                /*if (handler.GetCurrentAmmo() > diff)
                 {
-                    handler.ammo[data.ammoType] -= diff;
+                    //handler.ammo[data.ammoType] -= diff;
+
                     clip = getClipSize();
                 }
                 else
                 {
-                    clip += handler.ammo[data.ammoType];
-                    handler.ammo[data.ammoType] = 0;
-                }
+                    //clip += handler.ammo[data.ammoType];
+                    //handler.ammo[data.ammoType] = 0;
+                }*/
+                clip = getClipSize();
             }
 
             reloaded = true;
@@ -287,17 +289,18 @@ public class WeaponEntity : MonoBehaviour
             {
                 if (inp_trigger && clip > 0) break;
 
-                if (handler.ammo[data.ammoType] > 0)
+                /*if (handler.GetCurrentAmmo() > 0)
                 {
-                    handler.ammo[data.ammoType]--;
+                    //handler.ammo[data.ammoType]--;
                     clip++;
-
                     handler_events.WeaponShellInsert();
                 }
                 else
                 {
                     break;
-                }
+                }*/
+                clip++;
+                handler_events.WeaponShellInsert();
 
                 anim_InsertShell();
                 yield return new WaitForSeconds(data.animRel_Insert.length);
@@ -403,7 +406,7 @@ public class WeaponEntity : MonoBehaviour
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.Euler(0, 0, 0);
 
-        if (!reloaded && handler.ammo[data.ammoType] > 0)
+        if (!reloaded /*&& handler.GetCurrentAmmo() > 0*/)
         {
             if (!reloading && _reloadCoroutine == null) _reloadCoroutine = StartCoroutine(_reload());
         }

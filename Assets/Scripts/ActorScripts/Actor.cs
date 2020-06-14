@@ -50,10 +50,6 @@ public class Actor : MonoBehaviour
     private void Start()
     {
         var actWeap = GetComponent<ActorWeapon>();
-        actWeap.GiveWeapon(fists);
-
-        if (giveWeapons != null) StopCoroutine(giveWeapons);
-        giveWeapons = StartCoroutine(GiveStandardWeapons());
     }
 
     public void ApplyHealth(float amount)
@@ -129,24 +125,7 @@ public class Actor : MonoBehaviour
         GlobalEvents.current.ActorRevived(this);
         actEvents.ActorRevived(this);
 
-        if (giveWeapons != null) StopCoroutine(giveWeapons);
-        giveWeapons = StartCoroutine(GiveStandardWeapons());
-
         if (agent != null) agent.enabled = true;
-    }
-
-    Coroutine giveWeapons;
-    IEnumerator GiveStandardWeapons()
-    {
-        if (standardWeapon != null)
-        {
-            var actWeap = GetComponent<ActorWeapon>();
-            for (int i = 0; i < standardWeapon.Length; i++)
-            {
-                yield return new WaitForSecondsRealtime(0.1f); if (standardWeapon[i].type != WeaponType.Melee) actWeap.GiveAmmo(standardWeapon[i].ammoType, standardWeapon[i].clipSize * 6);
-                actWeap.GiveWeapon(standardWeapon[i]);
-            }
-        }
     }
 }
 
