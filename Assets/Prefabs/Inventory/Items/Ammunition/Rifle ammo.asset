@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33948b55fed126644b3b9a9e92b40551, type: 3}
   m_Name: Rifle ammo
   m_EditorClassIdentifier: 
-  prefab: {fileID: 2891090464507006728, guid: 0b86f3b55724964428c5f44050f3d66e, type: 3}
+  Name: Assault Rifle ammo
+  prefab_w: {fileID: 0}
+  icon: {fileID: 21300000, guid: a1079cd8047246f4da7aa0d756d48db2, type: 3}
   type: 2
+  weight: 0
+  canStack: 1
   description: Caliber used for rifles.
   ammoType: {fileID: 11400000, guid: 5c5152adb3cb80a4399e171e0a91267b, type: 2}

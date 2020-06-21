@@ -10,10 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4394082964128796688}
   - component: {fileID: 4982531419779364606}
-  - component: {fileID: 2352859255606693407}
   - component: {fileID: 3377128055800344711}
   m_Layer: 10
-  m_Name: Uzi
+  m_Name: mac10_eq
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54,22 +53,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!54 &2352859255606693407
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 766090173240369667}
-  serializedVersion: 2
-  m_Mass: 3
-  m_Drag: 0.1
-  m_AngularDrag: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!114 &3377128055800344711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82,25 +65,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f66343778282d7a4ea16ec7c3325bec6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coll:
-  - {fileID: 8642380368377367915}
-  isDropped: 1
+  anim: {fileID: 0}
+  ps_muzzle: []
+  ps_shells: {fileID: 0}
+  holstered: 1
+  isReloading: 0
+  isReloaded: 0
+  isChambered: 0
+  holdDown: 0
+  clip: 32
   HIK:
   - {fileID: 3596112997917038865}
   - {fileID: 1986761384670116993}
   muzzle: {fileID: 7344919676314750991}
   bullet: {fileID: 1084124365724883332}
-  labelPivot: {fileID: 5302352031993894644}
-  Modules: []
-  clip: 32
-  chambered: 1
-  reloaded: 1
-  haveSpace: 0
+  inp_fire: 0
+  inp_reload: 0
   data: {fileID: 11400000, guid: 26424cd6efb712f408b14d2771736294, type: 2}
   scope_swap: []
-  scope: {fileID: 0}
-  scoped: 0
-  relo_fade: 0
+  spread: 0
+  lastShot: 0
+  shotDelay: 0
+  handler_actor: {fileID: 0}
+  handler_events: {fileID: 0}
+  handler_look: {fileID: 0}
+  handler_motor: {fileID: 0}
+  handler: {fileID: 0}
   clipObject: {fileID: 919346073159272785}
 --- !u!1 &919346073159272785
 GameObject:
@@ -612,7 +602,6 @@ GameObject:
   - component: {fileID: 1138615518631334369}
   - component: {fileID: 7493030953054648637}
   - component: {fileID: 8642380368377367915}
-  - component: {fileID: 8040705097399733548}
   m_Layer: 10
   m_Name: Body
   m_TagString: Untagged
@@ -702,109 +691,3 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.04859826, y: 0.17532456, z: 0.2954561}
   m_Center: {x: -0.0022929404, y: 0.042004317, z: 0.04163023}
---- !u!82 &8040705097399733548
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9194884767996680025}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 1952172702480553213, guid: d3cbb6a7fed42024aad221620ba2332e,
-    type: 2}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 0
-  m_Volume: 0.25
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 5
-  MaxDistance: 1000
-  Pan2D: 0
-  rolloffMode: 2
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0.005
-      value: 1
-      inSlope: -2.3469484
-      outSlope: -2.3469484
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.052704778
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4

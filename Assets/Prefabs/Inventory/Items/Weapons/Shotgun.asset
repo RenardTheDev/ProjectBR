@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 049d2889ae02e39499e13dbdc115fd81, type: 3}
+  m_Name: Shotgun
+  m_EditorClassIdentifier: 
+  Name: Shotgun
+  prefab_w: {fileID: 7030334781878770737, guid: 105afabff42d11f40889af21f609fe1b,
+    type: 3}
+  icon: {fileID: -8708776809946123759, guid: c06fb318e817af646a6bfef7e5908c44, type: 3}
+  type: 1
+  weight: 5
+  canStack: 0
+  description: One shot - lots of hits.
+  weapon: {fileID: 11400000, guid: 030a420105822cc4a80aac1f91bb8505, type: 2}
+  prefab_eq: {fileID: 558274864982405353, guid: 019ad7c6e1632e64495df1ab67af7d38,
+    type: 3}

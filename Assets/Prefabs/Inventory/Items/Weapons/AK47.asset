@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 049d2889ae02e39499e13dbdc115fd81, type: 3}
   m_Name: AK47
   m_EditorClassIdentifier: 
+  Name: AK-47
   prefab_w: {fileID: 8695735231800095845, guid: 9e4120e41261b5c46a9bf77e7a06c8fc,
     type: 3}
   type: 1

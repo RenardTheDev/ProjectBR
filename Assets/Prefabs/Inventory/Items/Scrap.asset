@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39fc662020e3907409ac1eac21afa8f8, type: 3}
   m_Name: Scrap
   m_EditorClassIdentifier: 
-  prefab: {fileID: 0}
+  Name: Scrap
+  prefab_w: {fileID: 0}
+  icon: {fileID: 21300000, guid: aadd46648a024494e9db1231adbd4b2c, type: 3}
   type: 0
+  weight: 0
+  canStack: 1
   description: Local currency.

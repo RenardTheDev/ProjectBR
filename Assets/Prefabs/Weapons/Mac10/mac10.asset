@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9580b245c61770b42b3a6342004f2670, type: 3}
-  m_Name: uzi
+  m_Name: mac10
   m_EditorClassIdentifier: 
   Name: Uzi
   type: 0
@@ -30,6 +30,7 @@ MonoBehaviour:
   aimFOV: 50
   ammoType: {fileID: 11400000, guid: a8d7ae98949fad847a863d7736031654, type: 2}
   damageMult: 1
+  impactMult: 1
   caliberMass: 7.45
   pellets: 1
   hasScope: 0

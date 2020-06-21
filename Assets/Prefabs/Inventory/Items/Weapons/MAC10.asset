@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 049d2889ae02e39499e13dbdc115fd81, type: 3}
+  m_Name: MAC10
+  m_EditorClassIdentifier: 
+  Name: MAC-10
+  prefab_w: {fileID: 6326062926670266827, guid: a41ceea8b780b6f4393cb5390f9bb38b,
+    type: 3}
+  icon: {fileID: 7347583446273425228, guid: 3431adff211b46a44a6092e4cf230b5f, type: 3}
+  type: 1
+  weight: 2
+  canStack: 0
+  description: 
+  weapon: {fileID: 11400000, guid: 26424cd6efb712f408b14d2771736294, type: 2}
+  prefab_eq: {fileID: 766090173240369667, guid: 320fa5d92a9ce854cb3ba44386e56514,
+    type: 3}

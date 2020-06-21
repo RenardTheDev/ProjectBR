@@ -6,8 +6,10 @@ using UnityEngine;
 public class InventoryObject
 {
     public List<InventorySlot> container = new List<InventorySlot>();
-    public void AddItem(ItemObject _item, int _amount)
+    public InventorySlot AddItem(ItemObject _item, int _amount)
     {
+        InventorySlot newSlot = null;
+
         if (_item.canStack)
         {
             bool hasItem = false;
@@ -17,34 +19,74 @@ public class InventoryObject
                 {
                     container[i].AddAmount(_amount);
                     hasItem = true;
+                    newSlot = container[i];
                     break;
                 }
             }
 
             if (!hasItem)
             {
-                container.Add(new InventorySlot(_item, _amount));
+                newSlot = new InventorySlot(_item, _amount);
+                container.Add(newSlot);
             }
         }
         else
         {
-            container.Add(new InventorySlot(_item, 1));
+            newSlot = new InventorySlot(_item, 1);
+            container.Add(newSlot);
         }
+
+        return newSlot;
+    }
+    public InventorySlot AddStandaloneItem(ItemObject _item, int _amount)
+    {
+        InventorySlot newSlot = null;
+
+        newSlot = new InventorySlot(_item, _item.canStack ? _amount : 1);
+        container.Add(newSlot);
+
+        return newSlot;
+    }
+
+    public void RemoveSlot(InventorySlot slot)
+    {
+        container.Remove(slot);
     }
 
     public void RemoveItem(ItemObject _item, int _amount)
     {
-        for (int i = 0; i < container.Count; i++)
+        InventorySlot slot = container.Find(x => x.item == _item);
+        if (slot != null)
         {
-            if (container[i].item == _item)
+            slot.RemoveAmount(_amount);
+            if (slot.amount <= 0)
             {
-                container[i].RemoveAmount(_amount);
-                if (container[i].amount <= 0)
-                {
-                    container.RemoveAt(i);
-                }
-                break;
+                container.Remove(slot);
             }
+        }
+        else
+        {
+            Debug.LogError("RemoveItem(\'" + _item.Name + "\', " + _amount + ") cant find that item.");
+        }
+    }
+
+    public bool ContainsSlot(InventorySlot slot)
+    {
+        return container.Find(x => x == slot) != null;
+    }
+
+    public InventorySlot ContainsItem(ItemObject _item)
+    {
+        InventorySlot slot = container.Find(x => x.item == _item);
+        if (slot != null)
+        {
+            Debug.Log("ContainsItem(\'" + _item.Name + "\') found " + slot.amount + " of that.");
+            return slot;
+        }
+        else
+        {
+            Debug.LogError("ContainsItem(\'" + _item.Name + "\') cant find that item.");
+            return null;
         }
     }
 
@@ -52,13 +94,48 @@ public class InventoryObject
     {
         int value = 0;
 
-        for (int i = 0; i < container.Count; i++)
+        var item = container.Find(x => x.item == _item);
+        if (item!=null)
         {
-            if (container[i].item == _item)
-            {
-                value += container[i].amount;
-                if (_item.canStack) break;
-            }
+            value = item.amount;
+        }
+        else
+        {
+            Debug.LogError("GetQuantity(\'" + _item.Name + "\') cant find that item.");
+        }
+
+        return value;
+    }
+
+    public bool GetSelection(ItemObject _item)
+    {
+        bool value = false;
+
+        var item = container.Find(x => x.item == _item);
+        if (item != null)
+        {
+            value = item.selected;
+        }
+        else
+        {
+            Debug.LogError("GetSelection(\'" + _item.Name + "\') cant find that item.");
+        }
+
+        return value;
+    }
+
+    public bool GetEquipment(ItemObject _item)
+    {
+        bool value = false;
+
+        var item = container.Find(x => x.item == _item);
+        if (item != null)
+        {
+            value = item.equipped;
+        }
+        else
+        {
+            Debug.LogError("GetEquipment(\'" + _item.Name + "\') cant find that item.");
         }
 
         return value;
@@ -70,6 +147,8 @@ public class InventorySlot
 {
     public ItemObject item;
     public int amount;
+    public bool selected;
+    public bool equipped;
 
     public InventorySlot(ItemObject item, int amount)
     {
@@ -85,5 +164,15 @@ public class InventorySlot
     public void RemoveAmount(int value)
     {
         amount -= value;
+    }
+
+    public void MarkSelection(bool state)
+    {
+        selected = state && item is WeaponObject;
+    }
+
+    public void MarkEquipment(bool state)
+    {
+        equipped = state && item is WeaponObject;
     }
 }

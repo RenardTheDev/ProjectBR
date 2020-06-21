@@ -72,7 +72,6 @@ GameObject:
   - component: {fileID: 7398000486311068378}
   - component: {fileID: 6852323795243060237}
   - component: {fileID: 1326968135781896677}
-  - component: {fileID: 2445164829410463376}
   m_Layer: 10
   m_Name: Body
   m_TagString: Untagged
@@ -159,112 +158,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.06395299, y: 0.22149134, z: 0.8606181}
   m_Center: {x: 0.0041409433, y: 0.058861602, z: 0.14558427}
---- !u!82 &2445164829410463376
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3940154786033767866}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 1952172702480553213, guid: d3cbb6a7fed42024aad221620ba2332e,
-    type: 2}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 0
-  m_Volume: 0.25
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 5
-  MaxDistance: 1000
-  Pan2D: 0
-  rolloffMode: 2
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0.005
-      value: 1
-      inSlope: -2.3469484
-      outSlope: -2.3469484
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.052704778
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!1 &4248605623946581906
 GameObject:
   m_ObjectHideFlags: 0
@@ -335,10 +228,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6599717056933901943}
   - component: {fileID: 3482841583636622490}
-  - component: {fileID: 1162789625475309975}
   - component: {fileID: 1372981915526996221}
   m_Layer: 10
-  m_Name: ColtM4
+  m_Name: coltm4_eq
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -379,22 +271,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!54 &1162789625475309975
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7912189485573948516}
-  serializedVersion: 2
-  m_Mass: 3
-  m_Drag: 0.1
-  m_AngularDrag: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!114 &1372981915526996221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -407,25 +283,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f66343778282d7a4ea16ec7c3325bec6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coll:
-  - {fileID: 1326968135781896677}
-  isDropped: 1
+  anim: {fileID: 0}
+  ps_muzzle: []
+  ps_shells: {fileID: 0}
+  holstered: 1
+  isReloading: 0
+  isReloaded: 0
+  isChambered: 0
+  holdDown: 0
+  clip: 30
   HIK:
   - {fileID: 2840741871984768599}
   - {fileID: 6147438924018862994}
   muzzle: {fileID: 7343207883700946654}
   bullet: {fileID: 5182844919899053155}
-  labelPivot: {fileID: 2925965284202708479}
-  Modules: []
-  clip: 30
-  chambered: 1
-  reloaded: 1
-  haveSpace: 0
+  inp_fire: 0
+  inp_reload: 0
   data: {fileID: 11400000, guid: 8c1377cd72c770c46834d7358a9e2a5c, type: 2}
   scope_swap: []
-  scope: {fileID: 0}
-  scoped: 0
-  relo_fade: 0
+  spread: 0
+  lastShot: 0
+  shotDelay: 0
+  handler_actor: {fileID: 0}
+  handler_events: {fileID: 0}
+  handler_look: {fileID: 0}
+  handler_motor: {fileID: 0}
+  handler: {fileID: 0}
   clipObject: {fileID: 7947121972304077636}
 --- !u!1 &7947121972304077636
 GameObject:

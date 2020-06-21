@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Doll
+  - FxTemporaire
+  - inv_prim_slot
+  - inv_second_slot
   layers:
   - Default
   - TransparentFX
@@ -22,7 +25,7 @@ TagManager:
   - AmmoBox
   - PostProcess
   - Bounds
-  - 
+  - Pickup
   - 
   - 
   - 

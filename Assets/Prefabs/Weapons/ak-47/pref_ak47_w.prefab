@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5725485740660866135}
   - component: {fileID: 1242876490040454134}
   - component: {fileID: 8817028590022399702}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Magazine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 9000308785252091333}
   - component: {fileID: 2335595402309995323}
   - component: {fileID: 2025183423195622425}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Bolt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -172,7 +172,7 @@ GameObject:
   - component: {fileID: 9007613679480328017}
   - component: {fileID: 8621884495136851071}
   - component: {fileID: 8767589910585649884}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: pref_ak47_w
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -187,7 +187,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8695735231800095845}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.3667682, y: 0.29499996, z: 9.094643}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 9000308785252091333}
@@ -284,3 +284,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 793a87d7e4ad6e941836ba81908193bd, type: 2}
+  amount: 1

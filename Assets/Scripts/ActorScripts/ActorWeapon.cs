@@ -11,14 +11,17 @@ public class ActorWeapon : MonoBehaviour
     Animator anim;
     ActorInventory inv;
 
-    //public WeaponSlot[] weapon;
-    //public int slot = 0;    // 0 - nogun
+    public WeaponSlot[] slots;
+    public WeaponSlot currSlot;
 
     public LayerMask pickupMask;
 
     public Transform WeaponHolder;
 
     public bool isArmed;
+
+    public AudioSource sfx_Shooting;
+    public AudioSource sfx_Handling;
 
     private void Awake()
     {
@@ -28,6 +31,8 @@ public class ActorWeapon : MonoBehaviour
         motor = GetComponent<ActorMotor>();
         anim = GetComponent<Animator>();
         inv = GetComponent<ActorInventory>();
+
+        slots = new WeaponSlot[5];
     }
 
     private void Start()
@@ -46,20 +51,81 @@ public class ActorWeapon : MonoBehaviour
 
             if (isArmed)
             {
-                //currWEntity.inp_trigger = inp_fire;
-                //currWEntity.inp_reload = inp_reload;
+                //--- fire arm attacks ---
+                if (motor.dirLock_fade < 0.5f)
+                {
+                    currSlot.entity.inp_fire = inp_fire;
+                    currSlot.entity.inp_reload = inp_reload;
+                }
+            }
+            else
+            {
+                //--- melee attacks ---
             }
         }
     }
-    
-    private void FixedUpdate()
+
+    public void ChangeSlot(int id)
+    {
+        if (id == -1)
+        {
+            if (isArmed)
+            {
+                HolsterCurrentWeapon();
+            }
+            else
+            {
+                DrawCurrentWeapon();
+            }
+        }
+        else
+        {
+            if (id < slots.Length)
+            {
+                if (isArmed) HolsterCurrentWeapon();
+                DrawWeapon(id);
+            }
+        }
+    }
+
+    void DrawCurrentWeapon()
     {
 
     }
 
-    private void LateUpdate()
+    void DrawWeapon(int slot)
+    {
+        currSlot = slots[slot];
+    }
+
+    void HolsterCurrentWeapon()
     {
 
+    }
+
+    void AssignNewWeapon(int sID, WeaponEntity entity)
+    {
+        slots[sID].AssignWeapon(entity);
+    }
+
+    public void PlayShotSFX(AudioClip sfx)
+    {
+        sfx_Shooting.PlayOneShot(sfx);
+    }
+
+    public void PlayHandlingSFX(AudioClip sfx)
+    {
+        sfx_Handling.PlayOneShot(sfx);
+    }
+
+    public int GetCurrentAmmo()
+    {
+        return inv.inventory.GetQuantity(currSlot.caliber.invItem);
+    }
+
+    public void RemoveCurrentAmmo(int amount)
+    {
+        inv.inventory.RemoveItem(currSlot.caliber.invItem, amount);
     }
 
     bool useIK;
@@ -72,8 +138,8 @@ public class ActorWeapon : MonoBehaviour
     {
         if (!actor.isAlive) return;
 
-        /*dirLock_fade = motor.dirLock_fade;
-        if (isArmed)
+        dirLock_fade = motor.dirLock_fade;
+        /*if (isArmed)
         {
             WeaponHolder.rotation = Quaternion.Lerp(
                 Quaternion.Euler(Mathf.LerpAngle(look.aimEuler.x, 0f, relo_fade), look.aimEuler.y, 0),
@@ -133,14 +199,28 @@ public class ActorWeapon : MonoBehaviour
 [System.Serializable]
 public class WeaponSlot
 {
+    public bool isSelected;
     public WeaponEntity entity;
 
-    public float t_lastShot;
-    public float t_reloadStart;
+    //public int clip;
+
+    //--- links ---
+    public AmmoDATA caliber;
 
     public bool IsEmpty()
     {
         return entity == null;
+    }
+
+    public void AssignWeapon(WeaponEntity newEntity)
+    {
+        entity = newEntity;
+        caliber = entity.data.ammoType;
+    }
+
+    public void ClearWeapon()
+    {
+
     }
 }
 

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 049d2889ae02e39499e13dbdc115fd81, type: 3}
+  m_Name: ColtM4
+  m_EditorClassIdentifier: 
+  Name: Colt M4
+  prefab_w: {fileID: 632209172123608505, guid: 614b226adcf477d42a424db4c0d44d19, type: 3}
+  icon: {fileID: 8086831003865027512, guid: 4e08aa55c032db14087e4fc7b663af81, type: 3}
+  type: 1
+  weight: 5
+  canStack: 0
+  description: Fast and accurate.
+  weapon: {fileID: 11400000, guid: 8c1377cd72c770c46834d7358a9e2a5c, type: 2}
+  prefab_eq: {fileID: 7912189485573948516, guid: e9acd42d8bf13334c8f72702a638bc3b,
+    type: 3}

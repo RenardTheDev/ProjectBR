@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 049d2889ae02e39499e13dbdc115fd81, type: 3}
+  m_Name: SteyrSSG
+  m_EditorClassIdentifier: 
+  Name: Steyr SSG
+  prefab_w: {fileID: 3969893643690827968, guid: bbe9e59619a06cc4788ae38b69994056,
+    type: 3}
+  icon: {fileID: 6025420991154104967, guid: e7b3af74a5868c44285ffcd1b1082864, type: 3}
+  type: 1
+  weight: 5
+  canStack: 0
+  description: Good choice to bop some targets at longer distance.
+  weapon: {fileID: 11400000, guid: 15826bda16246a147b6220f724dc21b5, type: 2}
+  prefab_eq: {fileID: 2729746930990443281, guid: cc337e101f21dbe488ea398f9ce0235b,
+    type: 3}

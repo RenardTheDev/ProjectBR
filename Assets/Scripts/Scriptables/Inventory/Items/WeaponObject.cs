@@ -12,10 +12,12 @@ public class WeaponObject : ItemObject
     {
         type = ItemType.Weapon;
         prefab_eq = weapon.prefab;
+        icon = weapon.icon;
     }
 
     private void OnValidate()
     {
         prefab_eq = weapon.prefab;
+        icon = weapon.icon;
     }
 }

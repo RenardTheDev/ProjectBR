@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 049d2889ae02e39499e13dbdc115fd81, type: 3}
+  m_Name: Deagle
+  m_EditorClassIdentifier: 
+  Name: Desert Eagle .50
+  prefab_w: {fileID: 5051084276080795640, guid: 9e86f38678780c843892bfbcda983b8d,
+    type: 3}
+  icon: {fileID: -7337582166838380253, guid: f985ffe0bbebbc64293ba84d918c98e5, type: 3}
+  type: 1
+  weight: 2
+  canStack: 0
+  description: Compact but high firepower in your hands.
+  weapon: {fileID: 11400000, guid: a00b953707caf2748958ec32281183b7, type: 2}
+  prefab_eq: {fileID: 4532954637162832298, guid: 5974a913fa85983408050aa2fdf8331d,
+    type: 3}

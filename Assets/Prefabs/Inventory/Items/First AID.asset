@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff34a8586338d484c996457413da6f37, type: 3}
   m_Name: First AID
   m_EditorClassIdentifier: 
-  prefab: {fileID: 0}
+  Name: First AID
+  prefab_w: {fileID: 0}
+  icon: {fileID: 21300000, guid: 76f83b6360a63224eb80dccfefa10c5c, type: 3}
   type: 3
+  weight: 0
+  canStack: 1
   description: Simple first aid kit. Restoring 40HP.
   value: 40

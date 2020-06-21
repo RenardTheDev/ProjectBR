@@ -4239,8 +4239,8 @@ GameObject:
   - component: {fileID: -2322636574696542903}
   - component: {fileID: 9196441056570324391}
   - component: {fileID: 4287004977001478146}
-  - component: {fileID: 9196441056570324389}
   - component: {fileID: 6805610069425060690}
+  - component: {fileID: 9196441056570324389}
   - component: {fileID: 982267757487006557}
   - component: {fileID: 5432468474445554905}
   m_Layer: 8
@@ -4378,23 +4378,6 @@ MonoBehaviour:
   standardWeapon: []
   agent: {fileID: 0}
   Accuracy: 1
---- !u!114 &9196441056570324389
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9196441056570324410}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9bec8ca60b12294bb1de9f45915063e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lookAt: {x: 0, y: 0, z: 0}
-  aimEuler: {x: 0, y: 0, z: 0}
-  pitch: 0
-  heading: 0
-  yaw: 0
 --- !u!114 &6805610069425060690
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4424,12 +4407,25 @@ MonoBehaviour:
   moveDir: {x: 0, y: 0, z: 0}
   turnSmoothTime: 0.1
   turnSmoothVelocity: 0
-  fall2Roll_threshold: 15
-  fall2Hard_threshold: 10
-  animate:
-  - 0
-  - 0
-  - 0
+  rootm: 0
+  hardLanding_threshold: -10
+--- !u!114 &9196441056570324389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9196441056570324410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9bec8ca60b12294bb1de9f45915063e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lookAt: {x: 0, y: 0, z: 0}
+  aimEuler: {x: 0, y: 0, z: 0}
+  pitch: 0
+  heading: 0
+  yaw: 0
 --- !u!114 &982267757487006557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4442,45 +4438,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61c09450fc0b9b54eb7ccbd8582ccb34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon:
-  - slotType: 0
+  slots:
+  - entity: {fileID: 0}
+    t_lastShot: 0
+    t_reloadStart: 0
+    clip: 0
+  - entity: {fileID: 0}
+    t_lastShot: 0
+    t_reloadStart: 0
+    clip: 0
+  - entity: {fileID: 0}
+    t_lastShot: 0
+    t_reloadStart: 0
+    clip: 0
+  - entity: {fileID: 0}
+    t_lastShot: 0
+    t_reloadStart: 0
+    clip: 0
+  - entity: {fileID: 0}
+    t_lastShot: 0
+    t_reloadStart: 0
+    clip: 0
+  currSlot:
     entity: {fileID: 0}
     t_lastShot: 0
     t_reloadStart: 0
-    Holster: {fileID: 6149164418978308830}
-  - slotType: 1
-    entity: {fileID: 0}
-    t_lastShot: 0
-    t_reloadStart: 0
-    Holster: {fileID: 6985944717891210318}
-  - slotType: 2
-    entity: {fileID: 0}
-    t_lastShot: 0
-    t_reloadStart: 0
-    Holster: {fileID: 5632077341157302409}
-  slot: 0
+    clip: 0
   pickupMask:
     serializedVersion: 2
     m_Bits: 8192
   WeaponHolder: {fileID: 1857324842886830480}
-  spaceCheckMask:
-    serializedVersion: 2
-    m_Bits: 1
-  relo_fade: 0
   isArmed: 0
   inp_fire: 0
   inp_reload: 0
   bonePivot: {fileID: 1418356763048157865}
   sprintPivot: {fileID: 0}
-  aLaw:
-    weight: 1
-    bodyWeight: 0.5
-    headWeight: 1
-    eyesWeight: 1
-    clampWeight: 1
-  currWData: {fileID: 0}
-  currWEntity: {fileID: 0}
-  currCaliber: {fileID: 0}
 --- !u!114 &5432468474445554905
 MonoBehaviour:
   m_ObjectHideFlags: 0
