@@ -10,6 +10,7 @@ public class ActorLook : MonoBehaviour
     ActorEvents events;
     ActorMotor motor;
     ActorWeapon weapon;
+    ActorEquipment eqp;
     Animator animator;
     CharacterController character;
 
@@ -17,6 +18,7 @@ public class ActorLook : MonoBehaviour
 
     [Header("Look parameters")]
     public Vector3 lookAt;
+    public Vector3 lookAtVector;
     public Vector3 aimEuler;
     public float pitch;
     public float heading;
@@ -28,6 +30,8 @@ public class ActorLook : MonoBehaviour
         events = GetComponent<ActorEvents>();
         motor = GetComponent<ActorMotor>();
         weapon = GetComponent<ActorWeapon>();
+        eqp = GetComponent<ActorEquipment>();
+
         animator = GetComponent<Animator>();
         character = GetComponent<CharacterController>();
 
@@ -53,12 +57,24 @@ public class ActorLook : MonoBehaviour
             heading = aimEuler.y;
             yaw = aimEuler.z;
         }
+
+        lookAtVector = Quaternion.Euler(aimEuler) * Vector3.forward;
+        lookAt = actor.target.position + lookAtVector * 10f;
+
+        if (Vector3.Dot(lookAtVector, transform.forward) > 0)
+        {
+            lookAtLerp = Vector3.SlerpUnclamped(lookAtLerp, lookAt, Time.deltaTime * 4f);
+        }
+        else
+        {
+            lookAtLerp = Vector3.SlerpUnclamped(lookAtLerp, actor.target.position + transform.forward * 10f, Time.deltaTime * 4f);
+        }
     }
 
     Quaternion lookatQuat;
     public void LookAtPoint(Vector3 point)
     {
-        lookAt = point;
+        //lookAt = point;
 
         lookatQuat = Quaternion.LookRotation((point - actor.target.position).normalized, Vector3.up);
 
@@ -71,13 +87,15 @@ public class ActorLook : MonoBehaviour
 
     }
 
+    Vector3 lookAtLerp;
     private void OnAnimatorIK(int layerIndex)
     {
         if (actor.isAlive)
         {
-            if (weapon.isArmed)
+            animator.SetLookAtPosition(lookAtLerp);
+            if (eqp.isArmed)
             {
-                animator.SetLookAtWeight(1f, 0.0f, 1f, 1f, 1f);
+                animator.SetLookAtWeight(1f, 0.25f, 1f, 1f, 1f);
             }
             else
             {

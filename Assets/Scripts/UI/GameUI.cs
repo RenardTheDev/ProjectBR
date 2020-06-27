@@ -231,13 +231,29 @@ public class GameUI : MonoBehaviour
             }
             if (tagHash == "controls".GetHashCode())
             {
-                for (int i = 1; i < target.canvas.Length; i++)
+                /*for (int i = 1; i < target.canvas.Length; i++)
                 {
                     target.canvas[i].gameObject.SetActive(enable);
+                }*/
+                for (int i = 0; i < target.canvas.Length; i++) { target.canvas[i].enabled = enable; }
+            }
+            if (tagHash == "inv".GetHashCode() && !enable)
+            {
+                InventoryUI.current.OnInventoryClosed();
+            }
+            if (tagHash == "custom".GetHashCode())
+            {
+                if (enable)
+                {
+                    CustomizationMenu.current.OnCustomizationOpened();
+                }
+                else
+                {
+                    CustomizationMenu.current.OnCustomizationClosed();
                 }
             }
-
-            for (int i = 0; i < target.canvas.Length; i++) { target.canvas[i].enabled = enable; }
+            target.canvas[0].enabled = enable;
+            //for (int i = 0; i < target.canvas.Length; i++) { target.canvas[i].enabled = enable; }
         }
         else
         {

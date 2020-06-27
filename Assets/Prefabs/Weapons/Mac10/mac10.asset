@@ -15,11 +15,12 @@ MonoBehaviour:
   Name: Uzi
   type: 0
   prefab: {fileID: 766090173240369667, guid: 320fa5d92a9ce854cb3ba44386e56514, type: 3}
+  inv_object: {fileID: 11400000, guid: 781e5fdfcd60cec439915699206a7695, type: 2}
+  icon: {fileID: 7347583446273425228, guid: 3431adff211b46a44a6092e4cf230b5f, type: 3}
   sfx_shot: {fileID: 8300000, guid: d0142fc2fe9fb214687ee80bddcbad95, type: 3}
   sfx_chamber: {fileID: 8300000, guid: bfe212e18ca73c4449d4a451060a056f, type: 3}
   sfx_insert: {fileID: 8300000, guid: 254b9104a06cdc742b5c9bdb2f4fe1fb, type: 3}
   sfx_remove: {fileID: 8300000, guid: 551490d23146c41498a2ca64b775faff, type: 3}
-  icon: {fileID: 7347583446273425228, guid: 3431adff211b46a44a6092e4cf230b5f, type: 3}
   firingMode: 3
   reloadMode: 0
   clipSize: 32

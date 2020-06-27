@@ -15,11 +15,12 @@ MonoBehaviour:
   Name: Beretta
   type: 1
   prefab: {fileID: 4532954637162832298, guid: d9e8dc7c77a3da24da17fd423a40f181, type: 3}
+  inv_object: {fileID: 11400000, guid: b697140368d973343a2160bfd6c137d4, type: 2}
+  icon: {fileID: -7337582166838380253, guid: f985ffe0bbebbc64293ba84d918c98e5, type: 3}
   sfx_shot: {fileID: 8300000, guid: 81cc6fa49a5da3148b2bdba4d633a2b5, type: 3}
   sfx_chamber: {fileID: 8300000, guid: e6967ad0343c0aa4e95226fde9c44888, type: 3}
   sfx_insert: {fileID: 8300000, guid: 10bca35bd9ecb0640af00bc40ff42452, type: 3}
   sfx_remove: {fileID: 8300000, guid: 446e8ba7a863fc44ab653469dd6b609a, type: 3}
-  icon: {fileID: -7337582166838380253, guid: f985ffe0bbebbc64293ba84d918c98e5, type: 3}
   firingMode: 1
   reloadMode: 0
   clipSize: 15

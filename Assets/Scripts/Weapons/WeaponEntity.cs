@@ -28,6 +28,7 @@ public class WeaponEntity : MonoBehaviour
     public WeaponDATA data;
     public GameObject[] scope_swap;
     public float spread;
+    public float relo_fade;
 
     //--- timings ---
     [HideInInspector] public float lastShot;
@@ -38,11 +39,12 @@ public class WeaponEntity : MonoBehaviour
     [HideInInspector] public Coroutine _chamberCoroutine;
 
     //---handler---
-    [HideInInspector] public Actor handler_actor;
-    [HideInInspector] public ActorEvents handler_events;
-    [HideInInspector] public ActorLook handler_look;
-    [HideInInspector] public ActorMotor handler_motor;
-    [HideInInspector] public ActorWeapon handler;
+    [HideInInspector] public Actor h_actor;
+    [HideInInspector] public ActorEvents h_events;
+    [HideInInspector] public ActorLook h_look;
+    [HideInInspector] public ActorMotor h_motor;
+    [HideInInspector] public ActorWeapon h_weapon;
+    [HideInInspector] public ActorEquipment h_eqp;
 
     private void Awake()
     {
@@ -138,22 +140,22 @@ public class WeaponEntity : MonoBehaviour
 
     public void AnimEvent_Chamber()
     {
-        handler.PlayHandlingSFX(data.sfx_chamber);
+        h_weapon.PlayHandlingSFX(data.sfx_chamber);
     }
 
     public void AnimEvent_Remove()
     {
-        handler.PlayHandlingSFX(data.sfx_remove);
+        h_weapon.PlayHandlingSFX(data.sfx_remove);
     }
 
     public void AnimEvent_Insert()
     {
-        handler.PlayHandlingSFX(data.sfx_insert);
+        h_weapon.PlayHandlingSFX(data.sfx_insert);
     }
 
     public void AnimEvent_PlaySound(Object clip)
     {
-        handler.PlayHandlingSFX((AudioClip)clip);
+        h_weapon.PlayHandlingSFX((AudioClip)clip);
     }
 
     Vector3 clipPos;

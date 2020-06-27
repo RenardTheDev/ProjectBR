@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 135318609414149248}
   - component: {fileID: 6190517424556885874}
   m_Layer: 5
-  m_Name: selection_marker
+  m_Name: marker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -166,12 +166,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9435587af18e35049a645c1baac45995, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotID: 0
   nameLabel: {fileID: 500273109438399736}
   namePlateRect: {fileID: 7240527098512831068}
   ammoLabel: {fileID: 6819106668580867985}
   ammoPlateRect: {fileID: 6417956394896773708}
   icon: {fileID: 3120697307676928281}
-  selection: {fileID: 6190517424556885874}
+  mark: {fileID: 6190517424556885874}
+  select: {fileID: 1502894056478081969}
   selColors:
   - {r: 1, g: 1, b: 1, a: 0.39215687}
   - {r: 0.98039216, g: 0.29411766, b: 0.19607843, a: 1}
@@ -490,12 +492,12 @@ GameObject:
   - component: {fileID: 3440191434147164896}
   - component: {fileID: 1502894056478081969}
   m_Layer: 5
-  m_Name: selection_border
+  m_Name: selection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4636027046759990143
 RectTransform:
   m_ObjectHideFlags: 0
@@ -530,7 +532,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5469024236947307738}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 

@@ -15,11 +15,12 @@ MonoBehaviour:
   Name: AK-47
   type: 0
   prefab: {fileID: 2218609448374979306, guid: 3419dd96081bcc04bb36cdec45f449f9, type: 3}
+  inv_object: {fileID: 11400000, guid: 793a87d7e4ad6e941836ba81908193bd, type: 2}
+  icon: {fileID: 3355562461813336969, guid: c12be39af1fe5e94bac868ec93ee9d66, type: 3}
   sfx_shot: {fileID: 8300000, guid: 18a59847368c24843956d0e1175a4d9d, type: 3}
   sfx_chamber: {fileID: 8300000, guid: cbbae5c89b1499d479ad0b625db768df, type: 3}
   sfx_insert: {fileID: 8300000, guid: 2e87cad9eb001f14595d4879f2b75248, type: 3}
   sfx_remove: {fileID: 8300000, guid: 7b47640b5ff5d544c8ecec47753a1525, type: 3}
-  icon: {fileID: 3355562461813336969, guid: c12be39af1fe5e94bac868ec93ee9d66, type: 3}
   firingMode: 3
   reloadMode: 0
   clipSize: 30
@@ -30,6 +31,7 @@ MonoBehaviour:
   aimFOV: 40
   ammoType: {fileID: 11400000, guid: 5c5152adb3cb80a4399e171e0a91267b, type: 2}
   damageMult: 1
+  impactMult: 1
   caliberMass: 6.6
   pellets: 1
   hasScope: 0

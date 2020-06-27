@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class InventoryUI : MonoBehaviour
 {
+    Canvas canvas;
     public static InventoryUI current;
 
     public ItemObject[] itemBase;
@@ -15,22 +16,29 @@ public class InventoryUI : MonoBehaviour
     public LayerMask pickUpMask;
 
     [Header("Equipment")]
-    public ActorWeapon aWeap;
+    public ActorEquipment eqp;
+    public EquipmentSlotUI[] eqSlotUI;
+    public int selectedEQSlot = -1;
 
     [Header("Player container")]
+    public Actor player;
     public InventoryObject inv;
     public RectTransform playerListParent;
     public List<InventorySlotUI> plSlots = new List<InventorySlotUI>();
 
     [Header("Vicinity container")]
+    public float vicRadius = 2f;
+    public Vector3 vicOffset = new Vector3(0, 1.0f, 0);
+
     public InventoryObject vic; // temporary inventory for vicinity objects
     public RectTransform vicinityListParent;
     public List<InventorySlotUI> vicSlots = new List<InventorySlotUI>();
-    public Dictionary<InventorySlot, GameObject> pickups = new Dictionary<InventorySlot, GameObject>();
+    public Dictionary<InventorySlot, Item> pickups = new Dictionary<InventorySlot, Item>();
 
     private void Awake()
     {
         current = this;
+        canvas = GetComponent<Canvas>();
     }
 
     private void Start()
@@ -40,30 +48,225 @@ public class InventoryUI : MonoBehaviour
 
     private void Update()
     {
-        GenerateVicinityInventory(Vector3.zero, 4f, pickUpMask);
+        if (player != null && canvas.enabled)
+        {
+            GenerateVicinityInventory(player.transform.position + vicOffset, vicRadius, pickUpMask);
+            UpdateVicinityDisplay();
+        }
 
-        UpdatePlayerDisplay();
-        UpdateVicinityDisplay();
+        //UpdatePlayerDisplay();
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = new Color(0, 1, 0, 0.25f);
-        Gizmos.DrawSphere(Vector3.zero, 4f);
+        if (player != null && canvas.enabled)
+        {
+            Gizmos.color = new Color(0, 1, 0, 0.25f);
+            Gizmos.DrawSphere(player.transform.position + vicOffset, vicRadius);
+        }
+    }
+
+    public void AssignPlayer(Actor actor)
+    {
+        player = actor;
+        inv = player.GetComponent<ActorInventory>().inventory;
+        eqp = player.GetComponent<ActorEquipment>();
+
+        for (int i = 0; i < eqSlotUI.Length; i++)
+        {
+            eqSlotUI[i].AssignActor(eqp);
+        }
+
+        inv.InventoryUpdate += OnInventoryUpdate;
+
+        UpdatePlayerDisplay();
+    }
+
+    private void OnInventoryUpdate()
+    {
+        UpdatePlayerDisplay();
+    }
+
+    private void OnEnable()
+    {
+        if (inv != null) inv.InventoryUpdate += OnInventoryUpdate;
+        if (player != null && canvas.enabled)
+        {
+            OnInventoryUpdate();
+            GenerateVicinityInventory(player.transform.position + vicOffset, vicRadius, pickUpMask);
+            UpdateVicinityDisplay();
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (inv != null) inv.InventoryUpdate -= OnInventoryUpdate;
     }
 
     public void OnItemClicked(InventorySlot slot)
     {
-        if (vic.ContainsSlot(slot))
+        if (slot.item is WeaponObject)
         {
-            vic.RemoveSlot(slot);
-            Destroy(pickups[slot].gameObject, 0f);
-            pickups.Remove(slot);
+            if (selectedEQSlot != -1)
+            {
+                if (eqp.slots[selectedEQSlot].IsEmpty())
+                {
+                    if (vic.ContainsSlot(slot))
+                    {
+                        var wSlot = eqp.AssignWeaponToSlot(selectedEQSlot, ((WeaponObject)slot.item).weapon);
+                        eqSlotUI[selectedEQSlot].AssignSlot(wSlot);
 
-            UpdateVicinityDisplay();
+                        eqSlotUI[selectedEQSlot].ChangeSelection(false);
+                        selectedEQSlot = -1;
 
-            inv.AddItem(slot.item, slot.amount);
-            UpdatePlayerDisplay();
+                        DeletePickup(slot);
+
+                    }
+                }
+                else
+                {
+                    if (vic.ContainsSlot(slot))
+                    {
+                        PickupManager.current.SpawnWeaponPickup(
+                            eqp.slots[selectedEQSlot].entity.transform.position,
+                            eqp.slots[selectedEQSlot].entity.transform.rotation,
+                            eqp.slots[selectedEQSlot].entity.data);
+
+                        var wSlot = eqp.AssignWeaponToSlot(selectedEQSlot, ((WeaponObject)slot.item).weapon);
+                        eqSlotUI[selectedEQSlot].AssignSlot(wSlot);
+
+                        eqSlotUI[selectedEQSlot].ChangeSelection(false);
+                        selectedEQSlot = -1;
+
+                        DeletePickup(slot);
+                    }
+                }
+            }
+            else
+            {
+                int toSlot = 0;
+                for (int i = 2; i >= 0; i--)
+                {
+                    if (eqp.slots[toSlot].IsEmpty()) toSlot = i;
+                }
+
+                if (eqp.slots[toSlot].IsEmpty())
+                {
+                    if (vic.ContainsSlot(slot))
+                    {
+                        var wSlot = eqp.AssignWeaponToSlot(toSlot, ((WeaponObject)slot.item).weapon);
+                        eqSlotUI[toSlot].AssignSlot(wSlot);
+
+                        DeletePickup(slot);
+                    }
+                }
+                else
+                {
+                    if (vic.ContainsSlot(slot))
+                    {
+                        PickupManager.current.SpawnWeaponPickup(
+                            eqp.slots[toSlot].entity.transform.position,
+                            eqp.slots[toSlot].entity.transform.rotation,
+                            eqp.slots[toSlot].entity.data);
+
+                        var wSlot = eqp.AssignWeaponToSlot(toSlot, ((WeaponObject)slot.item).weapon);
+                        eqSlotUI[toSlot].AssignSlot(wSlot);
+
+                        DeletePickup(slot);
+                    }
+
+                }
+            }
+        }
+        else
+        {
+            if (vic.ContainsSlot(slot))
+            {
+                TakeSlot(slot);
+            }
+        }
+
+        /*if (selectedEQSlot != -1)
+        {
+            if (slot.item is WeaponObject)
+            {
+                if (inv.ContainsSlot(slot))
+                {
+                    var wSlot = eqp.AssignWeaponToSlot(selectedEQSlot, ((WeaponObject)slot.item).weapon);
+                    eqSlotUI[selectedEQSlot].AssignSlot(wSlot);
+                }
+                else if (vic.ContainsSlot(slot))
+                {
+                    var newslot = TakeSlot(slot);
+
+                    var wSlot = eqp.AssignWeaponToSlot(selectedEQSlot, ((WeaponObject)newslot.item).weapon);
+                    eqSlotUI[selectedEQSlot].AssignSlot(wSlot);
+                }
+            }
+        }
+        else
+        {
+            if (vic.ContainsSlot(slot))
+            {
+                TakeSlot(slot);
+            }
+        }*/
+    }
+
+    InventorySlot TakeSlot(InventorySlot slot)
+    {
+        DeletePickup(slot);
+
+        UpdateVicinityDisplay();
+
+        var newSlot = inv.AddItem(slot.item, slot.amount);
+        UpdatePlayerDisplay();
+
+        return newSlot;
+    }
+
+    void DeletePickup(InventorySlot slot)
+    {
+        vic.RemoveSlot(slot);
+
+        PickupManager.current.HidePickup(pickups[slot].pickup);
+
+        pickups.Remove(slot);
+    }
+
+    public void OnEquipmentSlotClicked(int slotID)
+    {
+        if (selectedEQSlot == -1)
+        {
+            //--- Start equipment selection ---
+            selectedEQSlot = slotID;
+            eqSlotUI[selectedEQSlot].ChangeSelection(true);
+        }
+        else
+        {
+            if (slotID == selectedEQSlot)
+            {
+                //--- Cancel equipment selection ---
+                eqSlotUI[selectedEQSlot].ChangeSelection(false);
+                selectedEQSlot = -1;
+            }
+        }
+    }
+
+    public void OnInventoryOpened()
+    {
+        for (int i = 0; i < eqSlotUI.Length; i++)
+        {
+            eqSlotUI[i].UpdateSlotPlate();
+        }
+    }
+
+    public void OnInventoryClosed()
+    {
+        if (selectedEQSlot != -1)
+        {
+            eqSlotUI[selectedEQSlot].ChangeSelection(false);
+            selectedEQSlot = -1;
         }
     }
 
@@ -103,7 +306,7 @@ public class InventoryUI : MonoBehaviour
     public void GenerateVicinityInventory(Vector3 pos, float radius, LayerMask mask)
     {
         vic = new InventoryObject();
-        pickups = new Dictionary<InventorySlot, GameObject>();
+        pickups = new Dictionary<InventorySlot, Item>();
 
         Collider[] colls = Physics.OverlapSphere(pos, radius, mask);
 
@@ -113,7 +316,7 @@ public class InventoryUI : MonoBehaviour
             if (pickup != null)
             {
                 var slot = vic.AddStandaloneItem(pickup.item, pickup.amount);
-                pickups.Add(slot, pickup.gameObject);
+                pickups.Add(slot, pickup.GetComponent<Item>());
             }
         }
 
@@ -150,6 +353,11 @@ public class InventoryUI : MonoBehaviour
         }
 
         playerListParent.sizeDelta = new Vector2(playerListParent.sizeDelta.x, vic.container.Count * (48 + y_space_between_item) - y_space_between_item);
+    }
+
+    public bool isActive()
+    {
+        return canvas.enabled;
     }
 }
 

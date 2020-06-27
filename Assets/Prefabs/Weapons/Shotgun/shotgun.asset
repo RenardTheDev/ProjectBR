@@ -15,11 +15,12 @@ MonoBehaviour:
   Name: Shotgun
   type: 0
   prefab: {fileID: 558274864982405353, guid: 019ad7c6e1632e64495df1ab67af7d38, type: 3}
+  inv_object: {fileID: 11400000, guid: 62226228a719a8842bc0e62321441a29, type: 2}
+  icon: {fileID: -8708776809946123759, guid: c06fb318e817af646a6bfef7e5908c44, type: 3}
   sfx_shot: {fileID: 8300000, guid: e1dedf976c8c3a2499365b0586aa08aa, type: 3}
   sfx_chamber: {fileID: 8300000, guid: 54731c5cbb86fd441b172280d755c204, type: 3}
   sfx_insert: {fileID: 8300000, guid: c51758c6fe1ed2345b80a723ec08b766, type: 3}
   sfx_remove: {fileID: 0}
-  icon: {fileID: -8708776809946123759, guid: c06fb318e817af646a6bfef7e5908c44, type: 3}
   firingMode: 0
   reloadMode: 1
   clipSize: 7
@@ -30,6 +31,7 @@ MonoBehaviour:
   aimFOV: 50
   ammoType: {fileID: 11400000, guid: 129f1e9824c87a14fb7006874a448b4a, type: 2}
   damageMult: 1
+  impactMult: 1
   caliberMass: 3.38
   pellets: 9
   hasScope: 0

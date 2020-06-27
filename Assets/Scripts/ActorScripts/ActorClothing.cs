@@ -10,6 +10,8 @@ public class ActorClothing : MonoBehaviour
     public Dictionary<ClothingType, SkinnedMeshRenderer> skinned;
     public Dictionary<string, Transform> bones;
 
+    //public SkinnedMeshRenderer skinned_build;
+
     private void Awake()
     {
         GetSkeleton();
@@ -95,8 +97,69 @@ public class ActorClothing : MonoBehaviour
         skinned[clothing.type].bones = bonesToRig.ToArray();
         skinned[clothing.type].enabled = true;
 
+        //UpdateCharacterBuild();
+
         if (clothing.type == ClothingType.torso) ApplyClothes(clothing.arms);
     }
+
+    /*void UpdateCharacterBuild()
+    {
+        Mesh newBuild = new Mesh();
+        newBuild.name = "CharacterBatch";
+
+        //List<int> tris = new List<int>();
+        //List<Vector3> verts = new List<Vector3>();
+        //List<Vector3> normals = new List<Vector3>();
+        //List<Vector2> UVs = new List<Vector2>();
+        List<Matrix4x4> binds = new List<Matrix4x4>();
+        List<BoneWeight> bw = new List<BoneWeight>();
+
+        //int lastIndCount = 0;
+        foreach (var s in skinned)
+        {
+            //for (int i = 0; i < s.Value.sharedMesh.triangles.Length; i++)
+            //{
+            //    tris.Add(s.Value.sharedMesh.triangles[i] + lastIndCount);
+            //}
+            //lastIndCount = s.Value.sharedMesh.triangles.Length;
+
+            //verts.AddRange(s.Value.sharedMesh.vertices);
+            //normals.AddRange(s.Value.sharedMesh.normals);
+            //UVs.AddRange(s.Value.sharedMesh.uv);
+
+            bw.AddRange(s.Value.sharedMesh.boneWeights);
+        }
+
+        for (int i = 0; i < bonesToRig.Count; i++)
+        {
+            binds.Add(bonesToRig[i].worldToLocalMatrix * transform.localToWorldMatrix);
+        }
+
+        //newBuild.triangles = tris.ToArray();
+        //newBuild.vertices = verts.ToArray();
+        //newBuild.normals = normals.ToArray();
+        //newBuild.uv = UVs.ToArray();
+
+        CombineInstance[] cis = new CombineInstance[skinned.Count];
+        int c = 0;
+        foreach (var s in skinned)
+        {
+            cis[c].mesh = s.Value.sharedMesh;
+            c++;
+            //s.Value.enabled = false;
+        }
+        newBuild.CombineMeshes(cis, true);
+
+        newBuild.boneWeights = bw.ToArray();
+        newBuild.bindposes = binds.ToArray();
+
+        newBuild.RecalculateBounds();
+        newBuild.RecalculateNormals();
+        newBuild.RecalculateTangents();
+
+        skinned_build.sharedMesh = newBuild;
+        skinned_build.bones = bonesToRig.ToArray();
+    }*/
 
     public void RandomizeClothes()
     {
@@ -125,8 +188,20 @@ public class ActorClothing : MonoBehaviour
                 ClothingType t = (ClothingType)i;
                 if (t != ClothingType.arms)
                 {
-                    int id = Random.Range(0, ClothesManager.current.cl_dict[t].Count);
-                    ChangeClothes(t, id);
+                    /*int id = Random.Range(0, ClothesManager.current.cl_dict[t].Count);
+                    ChangeClothes(t, id);*/
+
+                    int id = Random.Range(
+                        (t == ClothingType.hair || t == ClothingType.hat) ? -1 : 0,
+                        ClothesManager.current.cl_dict[t].Count);
+                    if (id == -1)
+                    {
+                        RemoveClothes(t);
+                    }
+                    else
+                    {
+                        ChangeClothes(t, id);
+                    }
                 }
             }
         }

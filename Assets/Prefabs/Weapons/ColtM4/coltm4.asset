@@ -15,11 +15,12 @@ MonoBehaviour:
   Name: Colt M4
   type: 0
   prefab: {fileID: 7912189485573948516, guid: e9acd42d8bf13334c8f72702a638bc3b, type: 3}
+  inv_object: {fileID: 11400000, guid: a22164f21c069894894d4a2a3a823eca, type: 2}
+  icon: {fileID: 8086831003865027512, guid: 4e08aa55c032db14087e4fc7b663af81, type: 3}
   sfx_shot: {fileID: 8300000, guid: c77879b48b11ab9438d21a7087918af0, type: 3}
   sfx_chamber: {fileID: 8300000, guid: cf5d4f0ffffc9054181a32c422dc7484, type: 3}
   sfx_insert: {fileID: 8300000, guid: 1b1d00195536a224d8e2054cb40100fd, type: 3}
   sfx_remove: {fileID: 8300000, guid: ce449673468767d47be61a20b4b63f9a, type: 3}
-  icon: {fileID: 8086831003865027512, guid: 4e08aa55c032db14087e4fc7b663af81, type: 3}
   firingMode: 3
   reloadMode: 0
   clipSize: 30
@@ -30,6 +31,7 @@ MonoBehaviour:
   aimFOV: 40
   ammoType: {fileID: 11400000, guid: 5c5152adb3cb80a4399e171e0a91267b, type: 2}
   damageMult: 1
+  impactMult: 1
   caliberMass: 4
   pellets: 1
   hasScope: 0

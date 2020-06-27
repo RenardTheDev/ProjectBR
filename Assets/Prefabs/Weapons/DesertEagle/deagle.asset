@@ -15,11 +15,12 @@ MonoBehaviour:
   Name: Desert Eagle
   type: 1
   prefab: {fileID: 4532954637162832298, guid: 5974a913fa85983408050aa2fdf8331d, type: 3}
+  inv_object: {fileID: 11400000, guid: 1c8eb7e955cb227478903171c24ea10f, type: 2}
+  icon: {fileID: -7337582166838380253, guid: f985ffe0bbebbc64293ba84d918c98e5, type: 3}
   sfx_shot: {fileID: 8300000, guid: 63cac01e0168fdd42bc36cf2a3277cb3, type: 3}
   sfx_chamber: {fileID: 8300000, guid: 5859f6d31d75efb4d945693b5c9f60e7, type: 3}
   sfx_insert: {fileID: 8300000, guid: 5549123a9fffd9c41920f59400a9358e, type: 3}
   sfx_remove: {fileID: 8300000, guid: 6e09ae62df9347d44a0fc9b74bd4fea0, type: 3}
-  icon: {fileID: -7337582166838380253, guid: f985ffe0bbebbc64293ba84d918c98e5, type: 3}
   firingMode: 1
   reloadMode: 0
   clipSize: 7
@@ -30,6 +31,7 @@ MonoBehaviour:
   aimFOV: 45
   ammoType: {fileID: 11400000, guid: a8d7ae98949fad847a863d7736031654, type: 2}
   damageMult: 1
+  impactMult: 1
   caliberMass: 19
   pellets: 1
   hasScope: 0

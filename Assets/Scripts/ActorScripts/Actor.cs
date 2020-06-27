@@ -44,6 +44,8 @@ public class Actor : MonoBehaviour
         {
             FindObjectOfType<PlayerUI>().AssignPlayer(this);
             PLAYERACTOR = this;
+
+            InventoryUI.current.AssignPlayer(this);
         }
     }
 
@@ -68,7 +70,12 @@ public class Actor : MonoBehaviour
     {
         isPlayer = state;
         tag = state ? "Player" : "Untagged";
-        if (state) PLAYERACTOR = this;
+        if (state)
+        {
+            PLAYERACTOR = this;
+
+            InventoryUI.current.AssignPlayer(this);
+        }
     }
 
     public void ApplyDamage(Damage dmg)

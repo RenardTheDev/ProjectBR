@@ -23,36 +23,24 @@ public class GlobalEvents : MonoBehaviour
     public event Action<Actor,Damage> onActorGetHit;
     public void ActorGetHit(Actor actor, Damage damage)
     {
-        if (onActorGetHit != null)
-        {
-            onActorGetHit(actor, damage);
-        }
+        onActorGetHit?.Invoke(actor, damage);
     }
 
     public event Action<Actor, Damage> onActorKilled;
     public void ActorKilled(Actor actor, Damage damage)
     {
-        if (onActorKilled != null)
-        {
-            onActorKilled(actor, damage);
-        }
+        onActorKilled?.Invoke(actor, damage);
     }
 
     public event Action<Actor> onActorRevived;
     public void ActorRevived(Actor actor)
     {
-        if (onActorRevived != null)
-        {
-            onActorRevived(actor);
-        }
+        onActorRevived?.Invoke(actor);
     }
 
     public event Action<Actor,float> onActorHealed;
     public void ActorHealed(Actor actor, float amount)
     {
-        if (onActorHealed != null)
-        {
-            onActorHealed(actor, amount);
-        }
+        onActorHealed?.Invoke(actor, amount);
     }
 }

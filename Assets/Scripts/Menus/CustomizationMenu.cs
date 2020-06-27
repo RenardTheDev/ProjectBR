@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cinemachine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -10,51 +11,104 @@ using UnityEngine.UI;
 
 public class CustomizationMenu : MonoBehaviour
 {
+    public static CustomizationMenu current;
+
     ClothesConfig playerClothes = new ClothesConfig();
 
     Canvas canvas;
 
-    public ActorClothing actor;
-    public Animator anim;
+    ActorClothing actor;
+    Animator anim;
 
     public RectTransform viewPort;
 
-    public GameObject items_Hats;
-    public GameObject items_Hair;
-    public GameObject items_Torso;
-    public GameObject items_Legs;
-    public GameObject items_Feet;
+    public Button[] category_btns;
+    public Canvas[] items_canvas;
+    public RectTransform[] items_packets;
 
     public GameObject prefab_item;
 
     public Dictionary<Button, ClothingDATA> items;
 
+    CinemachineVirtualCamera zoomCamera;
+
+    public int currentClothingType = 0;
+    //0 - hat
+    //1 - hair
+    //2 - torso
+    //3 - legs
+    //4 - feet
+
     private void Awake()
     {
+        current = this;
         canvas = GetComponent<Canvas>();
     }
 
     private void Start()
     {
-        actor = GameObject.FindGameObjectWithTag("Doll").GetComponent<ActorClothing>();
-        if (actor!=null)
-        {
-            anim = actor.GetComponent<Animator>();
-        }
-
         viewPort.gameObject.SetActive(false);
         UpdateClothesUI();
         viewPort.gameObject.SetActive(true);
 
+        if (anim == null)
+        {
+            anim = GameObject.Find("CM StateDriven").GetComponent<Animator>();
+        }
+
+        if (actor == null)
+        {
+            actor = GameObject.FindWithTag("Doll").GetComponent<ActorClothing>();
+        }
         LoadCustomization();
     }
 
-    private void Update()
+    /*private void Update()
     {
-        if (anim != null)
+        if (GameManager.current.gameState != GameState.mainmenu) return;
+    }*/
+
+    public void ToggleZoom(bool state)
+    {
+        zoom = state;
+        anim.SetBool("zoom", zoom);
+    }
+
+    bool zoom;
+    public void ChangeZoom()
+    {
+        zoom = !zoom;
+        anim.SetBool("zoom", zoom);
+    }
+
+    public void SelectTypeTab(int type)
+    {
+        currentClothingType = type;
+
+        anim.SetInteger("cust_type", currentClothingType);
+
+        for (int i = 0; i < items_canvas.Length; i++)
         {
-            anim.SetBool("customization", canvas.enabled);
+            items_canvas[i].enabled = i == currentClothingType;
         }
+
+        for (int i = 0; i < category_btns.Length; i++)
+        {
+            category_btns[i].interactable = i != currentClothingType;
+        }
+    }
+
+    public void OnCustomizationOpened()
+    {
+        SelectTypeTab(0);
+        anim.SetBool("cust", true);
+        ToggleZoom(false);
+    }
+
+    public void OnCustomizationClosed()
+    {
+        ToggleZoom(false);
+        anim.SetBool("cust", false);
     }
 
     public void UpdateClothesUI()
@@ -65,65 +119,81 @@ public class CustomizationMenu : MonoBehaviour
 
         if (Application.isEditor) ClothesManager.current = FindObjectOfType<ClothesManager>();
 
-        for (int i = -1; i < ClothesManager.current.cl_dict[ClothingType.hat].Count; i++)
+        int count = ClothesManager.current.cl_dict[ClothingType.hat].Count;
+        for (int i = -1; i < count; i++)
         {
-            if (i==-1)
+            var go = Instantiate(prefab_item, items_packets[0].transform);
+            var rect = go.GetComponent<RectTransform>();
+            rect.anchoredPosition = new Vector3(0, -(i + 1) * 64);
+
+            if (i == -1)
             {
-                var go = Instantiate(prefab_item, items_Hats.transform);
                 go.GetComponentInChildren<Text>().text = "Remove";
                 go.GetComponent<Button>().onClick.AddListener(CreateButtonAction(ClothingType.hat, -1));
             }
             else
             {
-                var go = Instantiate(prefab_item, items_Hats.transform);
                 go.GetComponentInChildren<Text>().text = ClothesManager.current.cl_dict[ClothingType.hat][i].ClothName;
                 go.GetComponent<Button>().onClick.AddListener(CreateButtonAction(ClothingType.hat, i));
             }
         }
+        items_packets[0].sizeDelta = new Vector2(384, (count + 1) * 64 - 8);
 
+        count = ClothesManager.current.cl_dict[ClothingType.hair].Count;
         for (int i = -1; i < ClothesManager.current.cl_dict[ClothingType.hair].Count; i++)
         {
+            var go = Instantiate(prefab_item, items_packets[1].transform);
+            var rect = go.GetComponent<RectTransform>();
+            rect.anchoredPosition = new Vector3(0, -(i + 1) * 64);
+
             if (i == -1)
             {
-                var go = Instantiate(prefab_item, items_Hair.transform);
                 go.GetComponentInChildren<Text>().text = "Remove";
                 go.GetComponent<Button>().onClick.AddListener(CreateButtonAction(ClothingType.hair, -1));
             }
             else
             {
-                var go = Instantiate(prefab_item, items_Hair.transform);
                 go.GetComponentInChildren<Text>().text = ClothesManager.current.cl_dict[ClothingType.hair][i].ClothName;
                 go.GetComponent<Button>().onClick.AddListener(CreateButtonAction(ClothingType.hair, i));
             }
         }
+        items_packets[1].sizeDelta = new Vector2(384, (count + 1) * 64 - 8);
 
+        count = ClothesManager.current.cl_dict[ClothingType.torso].Count;
         for (int i = 0; i < ClothesManager.current.cl_dict[ClothingType.torso].Count; i++)
         {
-            var go = Instantiate(prefab_item, items_Torso.transform);
+            var go = Instantiate(prefab_item, items_packets[2].transform);
+            var rect = go.GetComponent<RectTransform>();
+            rect.anchoredPosition = new Vector3(0, -i * 64);
+
             go.GetComponentInChildren<Text>().text = ClothesManager.current.cl_dict[ClothingType.torso][i].ClothName;
             go.GetComponent<Button>().onClick.AddListener(CreateButtonAction(ClothingType.torso, i));
         }
+        items_packets[2].sizeDelta = new Vector2(384, count * 64 - 8);
 
+        count = ClothesManager.current.cl_dict[ClothingType.legs].Count;
         for (int i = 0; i < ClothesManager.current.cl_dict[ClothingType.legs].Count; i++)
         {
-            var go = Instantiate(prefab_item, items_Legs.transform);
+            var go = Instantiate(prefab_item, items_packets[3].transform);
+            var rect = go.GetComponent<RectTransform>();
+            rect.anchoredPosition = new Vector3(0, -i * 64);
+
             go.GetComponentInChildren<Text>().text = ClothesManager.current.cl_dict[ClothingType.legs][i].ClothName;
             go.GetComponent<Button>().onClick.AddListener(CreateButtonAction(ClothingType.legs, i));
         }
+        items_packets[3].sizeDelta = new Vector2(384, count * 64 - 8);
 
+        count = ClothesManager.current.cl_dict[ClothingType.feet].Count;
         for (int i = 0; i < ClothesManager.current.cl_dict[ClothingType.feet].Count; i++)
         {
-            var go = Instantiate(prefab_item, items_Feet.transform);
+            var go = Instantiate(prefab_item, items_packets[4].transform);
+            var rect = go.GetComponent<RectTransform>();
+            rect.anchoredPosition = new Vector3(0, -i * 64);
+
             go.GetComponentInChildren<Text>().text = ClothesManager.current.cl_dict[ClothingType.feet][i].ClothName;
             go.GetComponent<Button>().onClick.AddListener(CreateButtonAction(ClothingType.feet, i));
         }
-
-        UpdateLayout();
-    }
-
-    public void UpdateLayout()
-    {
-        LayoutRebuilder.ForceRebuildLayoutImmediate(viewPort);
+        items_packets[4].sizeDelta = new Vector2(384, count * 64 - 8);
     }
 
     UnityAction CreateButtonAction(ClothingType type, int id)
@@ -181,35 +251,35 @@ public class CustomizationMenu : MonoBehaviour
 
     public void ClearItemsFromList()
     {
-        Button[] btns = items_Hats.GetComponentsInChildren<Button>();
+        Button[] btns = items_packets[0].GetComponentsInChildren<Button>();
         for (int i = 0; i < btns.Length; i++)
         {
             btns[i].onClick.RemoveAllListeners();
             DestroyImmediate(btns[i].gameObject);
         }
 
-        btns = items_Hair.GetComponentsInChildren<Button>();
+        btns = items_packets[1].GetComponentsInChildren<Button>();
         for (int i = 0; i < btns.Length; i++)
         {
             btns[i].onClick.RemoveAllListeners();
             DestroyImmediate(btns[i].gameObject);
         }
 
-        btns = items_Torso.GetComponentsInChildren<Button>();
+        btns = items_packets[2].GetComponentsInChildren<Button>();
         for (int i = 0; i < btns.Length; i++)
         {
             btns[i].onClick.RemoveAllListeners();
             DestroyImmediate(btns[i].gameObject);
         }
 
-        btns = items_Legs.GetComponentsInChildren<Button>();
+        btns = items_packets[3].GetComponentsInChildren<Button>();
         for (int i = 0; i < btns.Length; i++)
         {
             btns[i].onClick.RemoveAllListeners();
             DestroyImmediate(btns[i].gameObject);
         }
 
-        btns = items_Feet.GetComponentsInChildren<Button>();
+        btns = items_packets[4].GetComponentsInChildren<Button>();
         for (int i = 0; i < btns.Length; i++)
         {
             btns[i].onClick.RemoveAllListeners();

@@ -9,9 +9,9 @@ public class WeapEntityStandard : WeaponEntity
     {
         spread = Mathf.Lerp(spread, 0f, Time.fixedDeltaTime * 1f);
 
-        if (handler_actor != null && !holstered && handler_motor.dirLock_fade < 0.5f)
+        if (h_actor != null && !holstered && h_motor.dirLock_fade < 0.5f)
         {
-            if (inp_fire && handler_actor.isAlive && data.type != WeaponType.Melee && _chamberCoroutine == null && _reloadCoroutine == null)
+            if (inp_fire && h_actor.isAlive && data.type != WeaponType.Melee && _chamberCoroutine == null && _reloadCoroutine == null)
             {
                 if (isReloaded && clip > 0)
                 {
@@ -32,7 +32,7 @@ public class WeapEntityStandard : WeaponEntity
                 }
                 else
                 {
-                    if (handler.GetCurrentAmmo() > 0 && _reloadCoroutine == null && Time.time > lastShot + shotDelay)
+                    if (h_eqp.GetCurrentAmmo() > 0 && _reloadCoroutine == null && Time.time > lastShot + shotDelay)
                     {
                         _reloadCoroutine = StartCoroutine(_reload());
                     }
@@ -48,7 +48,7 @@ public class WeapEntityStandard : WeaponEntity
 
     public override void TryReload()
     {
-        if (clip < getClipSize() && handler.GetCurrentAmmo() > 0 && _chamberCoroutine == null && _reloadCoroutine == null)
+        if (clip < getClipSize() && h_eqp.GetCurrentAmmo() > 0 && _chamberCoroutine == null && _reloadCoroutine == null)
         {
             _reloadCoroutine = StartCoroutine(_reload());
         }
@@ -63,7 +63,7 @@ public class WeapEntityStandard : WeaponEntity
     {
         lastShot = Time.time;
 
-        handler.PlayShotSFX(data.sfx_shot);
+        h_weapon.PlayShotSFX(data.sfx_shot);
 
         //!--Make muzzleflash---
 
@@ -71,7 +71,7 @@ public class WeapEntityStandard : WeaponEntity
 
         gunVector = bullet.forward;
 
-        if (handler_actor.isPlayer)
+        if (h_actor.isPlayer)
         {
             shotPoint = bullet.position;
 
@@ -88,19 +88,19 @@ public class WeapEntityStandard : WeaponEntity
             {
                 resDirection = gunVector * 10f + Random.onUnitSphere * (spread + data.pelletSpreading);
                 ProjectileManager.current.SpawnProjectile(shotPoint,
-                resDirection.normalized, handler_actor, data
+                resDirection.normalized, h_actor, data
                 );
             }
         }
         else
         {
-            gunVector = (handler_look.lookAt - bullet.position).normalized;
+            gunVector = (h_look.lookAt - bullet.position).normalized;
 
             for (int i = 0; i < data.pellets; i++)
             {
-                resDirection = gunVector * 100f + Random.onUnitSphere * (spread + data.pelletSpreading + 10 * (1f - handler_actor.Accuracy));
+                resDirection = gunVector * 100f + Random.onUnitSphere * (spread + data.pelletSpreading + 10 * (1f - h_actor.Accuracy));
                 ProjectileManager.current.SpawnProjectile(bullet.position,
-                resDirection.normalized, handler_actor, data
+                resDirection.normalized, h_actor, data
                 );
             }
         }
@@ -121,7 +121,7 @@ public class WeapEntityStandard : WeaponEntity
             isChambered = false;
         }
 
-        handler_events.WeaponShot(data);
+        h_events.WeaponShot(data);
     }
 
     IEnumerator _chamber(bool afterShot)
@@ -137,7 +137,7 @@ public class WeapEntityStandard : WeaponEntity
         isReloading = false;
         holdDown = false;
 
-        handler_events.WeaponChambered();
+        h_events.WeaponChambered();
 
         _chamberCoroutine = null;
     }
@@ -146,7 +146,7 @@ public class WeapEntityStandard : WeaponEntity
     {
         if (_chamberCoroutine != null) StopCoroutine(_chamberCoroutine); _chamberCoroutine = null;
 
-        handler_events.WeaponReloadStart();
+        h_events.WeaponReloadStart();
 
         isReloading = true;
         isReloaded = false;
@@ -172,22 +172,22 @@ public class WeapEntityStandard : WeaponEntity
 
             int diff = getClipSize() - clip;
 
-            if (handler.GetCurrentAmmo() > diff)
+            if (h_eqp.GetCurrentAmmo() > diff)
             {
-                handler.RemoveCurrentAmmo(diff);
+                h_eqp.RemoveCurrentAmmo(diff);
                 clip = getClipSize();
             }
             else
             {
-                clip += handler.GetCurrentAmmo();
-                handler.RemoveCurrentAmmo(clip);
+                clip += h_eqp.GetCurrentAmmo();
+                h_eqp.RemoveCurrentAmmo(clip);
             }
 
 
             isReloaded = true;
             isReloading = false;
 
-            handler_events.WeaponReloadEnd();
+            h_events.WeaponReloadEnd();
 
             if (!isChambered)
             {
@@ -202,11 +202,11 @@ public class WeapEntityStandard : WeaponEntity
             {
                 if (inp_fire && clip > 0) break;
 
-                if (handler.GetCurrentAmmo() > 0)
+                if (h_eqp.GetCurrentAmmo() > 0)
                 {
-                    handler.RemoveCurrentAmmo(1);
+                    h_eqp.RemoveCurrentAmmo(1);
                     clip++;
-                    handler_events.WeaponShellInsert();
+                    h_events.WeaponShellInsert();
                 }
                 else
                 {
@@ -224,7 +224,7 @@ public class WeapEntityStandard : WeaponEntity
             isReloading = false;
             holdDown = false;
 
-            handler_events.WeaponReloadEnd();
+            h_events.WeaponReloadEnd();
 
             if (!isChambered)
             {

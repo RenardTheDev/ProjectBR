@@ -9,11 +9,14 @@ public class WeaponDATA : ScriptableObject
     public WeaponType type = WeaponType.Primary;
 
     public GameObject prefab;
+    public ItemObject inv_object;
+    public Sprite icon;
+
+    [Header("Audio")]
     public AudioClip sfx_shot;
     public AudioClip sfx_chamber;
     public AudioClip sfx_insert;
     public AudioClip sfx_remove;
-    public Sprite icon;
 
     public FiringMode firingMode = FiringMode.fullauto;
     public ReloadMode reloadMode = ReloadMode.clip;

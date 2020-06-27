@@ -9,6 +9,7 @@ public class ActorMotor : MonoBehaviour
     ActorLook look;
     Animator animator;
     ActorWeapon actWeapon;
+    ActorEquipment eqp;
     CharacterController character;
 
     public Transform weaponHolder;
@@ -38,6 +39,7 @@ public class ActorMotor : MonoBehaviour
         look = GetComponent<ActorLook>();
         animator = GetComponent<Animator>();
         actWeapon = GetComponent<ActorWeapon>();
+        eqp = GetComponent<ActorEquipment>();
         character = GetComponent<CharacterController>();
 
         CrouchingInput(false);
@@ -88,7 +90,7 @@ public class ActorMotor : MonoBehaviour
 
         rootm = animator.GetFloat("rootm");
 
-        dirLock_fade = Mathf.Lerp(dirLock_fade, (sprinting || !actWeapon.isArmed) ? 1f : 0f, Time.deltaTime * 3);
+        dirLock_fade = Mathf.Lerp(dirLock_fade, (sprinting || !eqp.isArmed) ? 1f : 0f, Time.deltaTime * 3);
 
         if (sprinting && inpDirection.magnitude < 0.1f)
         {
@@ -344,7 +346,7 @@ public class ActorMotor : MonoBehaviour
         }
         else
         {
-            if (actWeapon.isArmed)
+            if (eqp.isArmed)
             {
                 /*if (actWeapon.weapon[actWeapon.slot].entity.data.canCrouch)
                 {

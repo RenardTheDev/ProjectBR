@@ -12,6 +12,8 @@ public class GMSurvival : MonoBehaviour
     public Transform PlayerSpawner;
     public Transform[] EnemySpawner;
 
+    public float GameStartTime = 2f;
+
     //---Player stats---
     public int kills;
     public float score;
@@ -58,11 +60,11 @@ public class GMSurvival : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        PlayerUI.current.ShowBigCenterMSG("SURVIVAL MODE", col_attention, "Survive 10 rounds to win", 3, 1);
+        PlayerUI.current.ShowBigCenterMSG("SURVIVAL MODE", col_attention, "Survive 10 rounds to win", 2, 1);
 
         CameraControllerBase.current.ChangeToState("idle", 0);
 
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(GameStartTime);
 
         GameUI.current.EnableUICanvas("scr_effect");
         GameUI.current.EnableUICanvas("player");
@@ -73,7 +75,7 @@ public class GMSurvival : MonoBehaviour
     Coroutine cor_wavePreparation;
     IEnumerator WavePreparation()
     {
-        PlayerUI.current.ShowBigCenterMSG("Next wave incoming!", col_attention, "", 1, 0.5f);
+        PlayerUI.current.ShowBigCenterMSG("Next wave incoming!", col_attention, "", 1, 1f);
 
         yield return new WaitForSeconds(3f);
         StartCoroutine(WaveStart());
@@ -132,7 +134,7 @@ public class GMSurvival : MonoBehaviour
     Coroutine cor_waveComplete;
     IEnumerator WaveComplete()
     {
-        PlayerUI.current.ShowBigCenterMSG("Wave complete", col_win, "", 2, 0.5f);
+        PlayerUI.current.ShowBigCenterMSG("Wave complete", col_win, "", 2, 1f);
 
         GameUI.current.DisableUICanvas("player");
         GameUI.current.DisableUICanvas("inv");
@@ -154,7 +156,7 @@ public class GMSurvival : MonoBehaviour
     Coroutine cor_gameOver;
     IEnumerator GameOver()
     {
-        PlayerUI.current.ShowBigCenterMSG("WASTED", col_lose, "", 1, 0.5f);
+        PlayerUI.current.ShowBigCenterMSG("WASTED", col_lose, "", 1, 1f);
 
         Time.timeScale = 0.1f;
         yield return new WaitForSeconds(3f);

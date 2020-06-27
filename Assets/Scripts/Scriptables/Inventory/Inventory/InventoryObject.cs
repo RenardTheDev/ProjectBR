@@ -1,10 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
 public class InventoryObject
 {
+    public event Action InventoryUpdate;
+
     public List<InventorySlot> container = new List<InventorySlot>();
     public InventorySlot AddItem(ItemObject _item, int _amount)
     {
@@ -36,6 +39,7 @@ public class InventoryObject
             container.Add(newSlot);
         }
 
+        InventoryUpdate?.Invoke();
         return newSlot;
     }
     public InventorySlot AddStandaloneItem(ItemObject _item, int _amount)
@@ -45,12 +49,15 @@ public class InventoryObject
         newSlot = new InventorySlot(_item, _item.canStack ? _amount : 1);
         container.Add(newSlot);
 
+        InventoryUpdate?.Invoke();
         return newSlot;
     }
 
     public void RemoveSlot(InventorySlot slot)
     {
         container.Remove(slot);
+
+        InventoryUpdate?.Invoke();
     }
 
     public void RemoveItem(ItemObject _item, int _amount)
@@ -68,6 +75,8 @@ public class InventoryObject
         {
             Debug.LogError("RemoveItem(\'" + _item.Name + "\', " + _amount + ") cant find that item.");
         }
+
+        InventoryUpdate?.Invoke();
     }
 
     public bool ContainsSlot(InventorySlot slot)
@@ -101,7 +110,7 @@ public class InventoryObject
         }
         else
         {
-            Debug.LogError("GetQuantity(\'" + _item.Name + "\') cant find that item.");
+            //Debug.LogError("GetQuantity(\'" + _item.Name + "\') cant find that item.");
         }
 
         return value;

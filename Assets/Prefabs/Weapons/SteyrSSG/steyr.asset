@@ -15,11 +15,12 @@ MonoBehaviour:
   Name: Steyr SSG
   type: 0
   prefab: {fileID: 2729746930990443281, guid: cc337e101f21dbe488ea398f9ce0235b, type: 3}
+  inv_object: {fileID: 11400000, guid: cce83c46b29b4c54aa3796e4435a6670, type: 2}
+  icon: {fileID: 6025420991154104967, guid: e7b3af74a5868c44285ffcd1b1082864, type: 3}
   sfx_shot: {fileID: 8300000, guid: bdf1be88219569a45b7b03f9ebc38890, type: 3}
   sfx_chamber: {fileID: 8300000, guid: 32243b678490a49488598b1f24478724, type: 3}
   sfx_insert: {fileID: 8300000, guid: 9fc2ceb133e200149923c57c22b9dc9e, type: 3}
   sfx_remove: {fileID: 8300000, guid: 5d6f1a0c9f6019e4fa97b1c2590d759a, type: 3}
-  icon: {fileID: 6025420991154104967, guid: e7b3af74a5868c44285ffcd1b1082864, type: 3}
   firingMode: 0
   reloadMode: 0
   clipSize: 7
@@ -30,6 +31,7 @@ MonoBehaviour:
   aimFOV: 10
   ammoType: {fileID: 11400000, guid: 13a13489ec6fc814a9294e17d1daa9e1, type: 2}
   damageMult: 1.5
+  impactMult: 1
   caliberMass: 10.2
   pellets: 1
   hasScope: 1

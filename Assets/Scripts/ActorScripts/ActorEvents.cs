@@ -7,30 +7,30 @@ public class ActorEvents : MonoBehaviour
 {
     //--- WEAPON EVENTS ---
     public event Action<WeaponDATA> onWeaponShot;
-    public void WeaponShot(WeaponDATA data) { if (onWeaponShot != null) onWeaponShot(data); }
+    public void WeaponShot(WeaponDATA data) { onWeaponShot?.Invoke(data); }
 
     public event Action onWeaponChambered;
-    public void WeaponChambered() { if (onWeaponChambered != null) onWeaponChambered(); }
+    public void WeaponChambered() { onWeaponChambered?.Invoke(); }
 
     public event Action onWeaponShellInsert;
-    public void WeaponShellInsert() { if (onWeaponShellInsert != null) onWeaponShellInsert(); }
+    public void WeaponShellInsert() { onWeaponShellInsert?.Invoke(); }
 
     public event Action onWeaponReloadStart;
-    public void WeaponReloadStart() { if (onWeaponReloadStart != null) onWeaponReloadStart(); }
+    public void WeaponReloadStart() { onWeaponReloadStart?.Invoke(); }
 
     public event Action onWeaponReloadEnd;
-    public void WeaponReloadEnd() { if (onWeaponReloadEnd != null) onWeaponReloadEnd(); }
+    public void WeaponReloadEnd() { onWeaponReloadEnd?.Invoke(); }
 
     //--- DAMAGE EVENTS ---
     public event Action<Actor, Damage> onActorGetHit;
-    public void ActorGetHit(Actor actor, Damage damage) { if (onActorGetHit != null) onActorGetHit(actor, damage); }
+    public void ActorGetHit(Actor actor, Damage damage) { onActorGetHit?.Invoke(actor, damage); }
 
     public event Action<Actor, Damage> onActorKilled;
-    public void ActorKilled(Actor actor, Damage damage) { if (onActorKilled != null) onActorKilled(actor, damage); }
+    public void ActorKilled(Actor actor, Damage damage) { onActorKilled?.Invoke(actor, damage); }
 
     public event Action<Actor> onActorRevived;
-    public void ActorRevived(Actor actor) { if (onActorRevived != null) onActorRevived(actor); }
+    public void ActorRevived(Actor actor) { onActorRevived?.Invoke(actor); }
 
     public event Action<Actor, float> onActorHealed;
-    public void ActorHealed(Actor actor, float amount) { if (onActorHealed != null) onActorHealed(actor, amount); }
+    public void ActorHealed(Actor actor, float amount) { onActorHealed?.Invoke(actor, amount); }
 }
