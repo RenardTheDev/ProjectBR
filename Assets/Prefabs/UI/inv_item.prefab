@@ -40,7 +40,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 48}
-  m_SizeDelta: {x: 280, y: 48}
+  m_SizeDelta: {x: 280, y: 56}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &340279746449058041
 CanvasRenderer:
@@ -91,9 +91,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5107f4cb31d61594f938806c95259e77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inv:
-    container: []
-  item: {fileID: 11400000, guid: 793a87d7e4ad6e941836ba81908193bd, type: 2}
+  rt: {fileID: 0}
+  slot:
+    item: {fileID: 0}
+    amount: 0
+    selected: 0
+    equipped: 0
   nameLabel: {fileID: 1759565001299347949}
   amountLabel: {fileID: 1759565000591735186}
   icon: {fileID: 1759565000691182464}
@@ -136,7 +139,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 48, y: 0}
+  m_SizeDelta: {x: 56, y: 0}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &1759565000591735185
 CanvasRenderer:
@@ -153,7 +156,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1759565000591735196}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
@@ -213,8 +216,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 24, y: 0}
-  m_SizeDelta: {x: 48, y: 0}
+  m_AnchoredPosition: {x: 28, y: 0}
+  m_SizeDelta: {x: 56, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1759565000691182471
 CanvasRenderer:
@@ -288,8 +291,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -112, y: 0}
+  m_AnchoredPosition: {x: 2, y: 0}
+  m_SizeDelta: {x: -116, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1759565001299347948
 CanvasRenderer:

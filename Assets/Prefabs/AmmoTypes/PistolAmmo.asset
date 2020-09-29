@@ -16,3 +16,4 @@ MonoBehaviour:
   maxTravel: 1000
   color: {r: 0.39215687, g: 0.6862745, b: 0.98039216, a: 1}
   boxMat: {fileID: 2100000, guid: 7cd863c64d434f44a90fc782ddff3d20, type: 2}
+  invItem: {fileID: 11400000, guid: bc789be615ce30a4e8867b9eea92f9b8, type: 2}

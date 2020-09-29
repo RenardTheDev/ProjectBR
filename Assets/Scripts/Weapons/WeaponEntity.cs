@@ -9,11 +9,11 @@ public class WeaponEntity : MonoBehaviour
     public ParticleSystem[] ps_muzzle;
     public ParticleSystem ps_shells;
 
-    [HideInInspector] public bool holstered = true;
-    [HideInInspector] public bool isReloading;
-    [HideInInspector] public bool isReloaded;
-    [HideInInspector] public bool isChambered;
-    [HideInInspector] public bool holdDown;
+    public bool holstered = true;
+    public bool isReloading;
+    public bool isReloaded;
+    public bool isChambered;
+    public bool holdDown;
 
     public int clip;
 
@@ -21,8 +21,8 @@ public class WeaponEntity : MonoBehaviour
     public Transform muzzle;
     public Transform bullet;
 
-    [HideInInspector] public bool inp_fire;
-    [HideInInspector] public bool inp_reload;
+    public bool inp_fire;
+    public bool inp_reload;
 
     //---helpers---
     public WeaponDATA data;
@@ -41,7 +41,6 @@ public class WeaponEntity : MonoBehaviour
     //---handler---
     [HideInInspector] public Actor h_actor;
     [HideInInspector] public ActorEvents h_events;
-    [HideInInspector] public ActorLook h_look;
     [HideInInspector] public ActorMotor h_motor;
     [HideInInspector] public ActorWeapon h_weapon;
     [HideInInspector] public ActorEquipment h_eqp;
@@ -49,6 +48,12 @@ public class WeaponEntity : MonoBehaviour
     private void Awake()
     {
         anim = GetComponent<Animator>();
+
+        if(clip > 0)
+        {
+            isReloaded = true;
+            isChambered = true;
+        }
     }
 
     private void Start()
@@ -69,11 +74,48 @@ public class WeaponEntity : MonoBehaviour
         }
     }
 
+    public void AssignHandler(Actor actor, ActorMotor motor, ActorWeapon weapon, ActorEquipment eqp, ActorEvents events)
+    {
+        h_actor = actor;
+        h_motor = motor;
+        h_weapon = weapon;
+        h_eqp = eqp;
+        h_events = events;
+    }
+
+    public void ClearHandler()
+    {
+        h_actor = null;
+        h_events = null;
+        h_motor = null;
+        h_weapon = null;
+        h_eqp = null;
+    }
+
     public virtual void TryShoot()
     { }
 
     public virtual void TryReload()
     { }
+
+    public void Draw()
+    {
+        holstered = false;
+    }
+
+    public void Holster()
+    {
+        if (_reloadCoroutine != null) StopCoroutine(_reloadCoroutine);
+        if (_chamberCoroutine != null) StopCoroutine(_chamberCoroutine);
+        StopAnimations();
+
+        holstered = true;
+        isReloading = false;
+        if (clip > 0)
+        {
+            isReloaded = true;
+        }
+    }
 
     public void OnAimStateChanged(bool state)
     {

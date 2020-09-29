@@ -6,7 +6,7 @@ using UnityEngine.PlayerLoop;
 
 public class ActorLook : MonoBehaviour
 {
-    Actor actor;
+    /*Actor actor;
     ActorEvents events;
     ActorMotor motor;
     ActorWeapon weapon;
@@ -48,6 +48,7 @@ public class ActorLook : MonoBehaviour
 
     }
 
+    float lookLerp = 0;
     private void LateUpdate()
     {
         if (actor.isPlayer)
@@ -56,19 +57,14 @@ public class ActorLook : MonoBehaviour
             pitch = aimEuler.x;
             heading = aimEuler.y;
             yaw = aimEuler.z;
+
+            CameraControllerBase.current.UpdateCameraTransform();
         }
 
         lookAtVector = Quaternion.Euler(aimEuler) * Vector3.forward;
-        lookAt = actor.target.position + lookAtVector * 10f;
-
-        if (Vector3.Dot(lookAtVector, transform.forward) > 0)
-        {
-            lookAtLerp = Vector3.SlerpUnclamped(lookAtLerp, lookAt, Time.deltaTime * 4f);
-        }
-        else
-        {
-            lookAtLerp = Vector3.SlerpUnclamped(lookAtLerp, actor.target.position + transform.forward * 10f, Time.deltaTime * 4f);
-        }
+        lookLerp = Mathf.Lerp(lookLerp, Vector3.Dot(lookAtVector, transform.forward) > 0 ? 1 : 0, Time.deltaTime * 2);
+        if (lookLerp > 0) lookAt = actor.target.position + lookAtVector * 10f;
+        lookAtLerp = Vector3.SlerpUnclamped(actor.target.position + transform.forward * 10f, lookAt, lookLerp);
     }
 
     Quaternion lookatQuat;
@@ -102,5 +98,5 @@ public class ActorLook : MonoBehaviour
                 animator.SetLookAtWeight(1f, 0.0f, 1f, 1f, 1f);
             }
         }
-    }
+    }*/
 }

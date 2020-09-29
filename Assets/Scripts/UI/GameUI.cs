@@ -1,12 +1,36 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameUI : MonoBehaviour
 {
     public static GameUI current;
+
+    [Header("UI Packets")]
+    public GameObject uip_mainmenu;
+    public GameObject uip_pause;
+    public GameObject uip_gameplay;
+    public GameObject uip_always;
+    public GameObject uip_controls;
+
+    [Header("UI Canvases")]
+    public Canvas c_mainmenu;
+    public Canvas c_customization;
+    public Canvas c_pause;
+    public Canvas c_effects;
+    public Canvas c_msg;
+    public Canvas c_player;
+    public Canvas c_inv;
+    public Canvas c_eqp;
+    public Canvas c_settings;
+    public Canvas c_debug;
+
+    public bool invOpened;
+    public bool eqpOpened;
+
     private void Awake()
     {
         if (current != null)
@@ -20,67 +44,51 @@ public class GameUI : MonoBehaviour
         }
     }
 
-    public bool invOpened;
-
     private void Start()
     {
+        DisableAllCanvas();
+
         SceneManager.activeSceneChanged += ActiveSceneChanged;
-        ToggleUICanvas("mainmenu", true);
+
+        if (GameManager.current.gameState == GameState.mainmenu)
+        {
+            uip_mainmenu.SetActive(true);
+            c_mainmenu.enabled = true;
+        }
     }
 
     private void ActiveSceneChanged(Scene from, Scene to)
     {
         Debug.Log("ActiveSceneChanged: from.buildIndex = " + from.buildIndex + " | to.buildIndex = " + to.buildIndex);
-        DisableAllUICanvas();
+        DisableAllCanvas();
         if (to.buildIndex == 0)
         {
-            EnableUICanvas("mainmenu");
+            //EnableUICanvas("mainmenu");
+            uip_mainmenu.SetActive(true);
+            c_mainmenu.enabled = true;
         }
     }
 
-    public List<CanvasPacket> canvas;
-
-    private void OnValidate()
+    public void DisableAllCanvas()
     {
-        foreach (CanvasPacket c in canvas)
-        {
-            c.name = c.go.name;
-            c.tagHash = c.tag.GetHashCode();
-            c.canvas = c.go.GetComponentsInChildren<Canvas>();
-        }
+        uip_mainmenu.SetActive(false);
+        uip_gameplay.SetActive(false);
+        uip_controls.SetActive(false);
+        uip_pause.SetActive(false);
     }
-
-    public void UpdateCanvasList()
-    {
-        List<Canvas> cList = new List<Canvas>();
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            var c = transform.GetChild(i).GetComponent<Canvas>();
-            if (c != null)
-            {
-                cList.Add(c);
-            }
-        }
-
-        canvas = new List<CanvasPacket>();
-        for (int i = 0; i < cList.Count; i++)
-        {
-            canvas.Add(new CanvasPacket(cList[i].gameObject));
-        }
-    }
-
-    Dictionary<int, bool> pauseCanvasSave;
 
     private void Update()
     {
-        if (TouchController.current.button_inventory.state == bindState.down)
+        if (GameManager.current.gameState == GameState.gameplay)
         {
-            if (GameManager.current.gameState == GameState.gameplay && !invOpened)
+            if (TouchController.current.button_inventory.state == bindState.down)
             {
-                invOpened = true;
+                ToggleInventory(!invOpened);
+            }
 
-                ToggleUICanvas("controls", false);
-                ToggleUICanvas("inv", true);
+            if (!invOpened && TouchController.current.button_equipment.state == bindState.down)
+            {
+                ToggleEquipment(!eqpOpened);
             }
         }
 
@@ -93,13 +101,13 @@ public class GameUI : MonoBehaviour
                     break;
                 case GameState.mainmenu:
                     {
-                        if (IsUICanvasActive("settings"))
+                        if (c_settings.enabled)
                         {
-                            CloseSettings();
+                            ToggleSettings(false);
                         }
-                        if (IsUICanvasActive("custom"))
+                        else if (c_customization.enabled)
                         {
-                            CloseCustomization();
+                            ToggleCustomization(false);
                         }
                         break;
                     }
@@ -109,24 +117,32 @@ public class GameUI : MonoBehaviour
                         {
                             invOpened = false;
 
-                            ToggleUICanvas("controls", true);
-                            ToggleUICanvas("inv", false);
+                            c_inv.enabled = invOpened;
+                            c_eqp.enabled = invOpened;
                         }
                         else
                         {
-                            TogglePause(true);
+                            uip_gameplay.SetActive(false);
+                            uip_controls.SetActive(false);
+                            uip_pause.SetActive(true);
+
+                            GameManager.current.gameState = GameState.pause;
                         }
                         break;
                     }
                 case GameState.pause:
                     {
-                        if (IsUICanvasActive("settings"))
+                        if (c_settings.enabled)
                         {
-                            CloseSettings();
+                            ToggleSettings(false);
                         }
                         else
                         {
-                            TogglePause(false);
+                            uip_gameplay.SetActive(true);
+                            uip_controls.SetActive(true);
+                            uip_pause.SetActive(false);
+
+                            GameManager.current.gameState = GameState.gameplay;
                         }
                         break;
                     }
@@ -137,190 +153,73 @@ public class GameUI : MonoBehaviour
     }
 
     //--- Windows togglers ---
+    public void ToggleInventory(bool toggle)
+    {
+        if (GameManager.current.gameState == GameState.gameplay)
+        {
+            invOpened = toggle;
+            eqpOpened = invOpened;
+
+            c_inv.enabled = invOpened;
+            c_eqp.enabled = eqpOpened;
+
+            InventoryUI.current.OnToggleInventory(toggle);
+        }
+    }
+
+    public void ToggleEquipment(bool toggle)
+    {
+        if (!invOpened && GameManager.current.gameState == GameState.gameplay)
+        {
+            eqpOpened = toggle;
+            c_eqp.enabled = eqpOpened;
+
+            InventoryUI.current.OnToggleInventory(toggle);
+        }
+    }
+
     public void TogglePause(bool toggle)
     {
         if (toggle && GameManager.current.gameState == GameState.gameplay)
         {
             GameManager.current.gameState = GameState.pause;
 
-            ToggleUICanvas("scr_effect", false);
-            ToggleUICanvas("msg", false);
-            ToggleUICanvas("controls", false);
-            ToggleUICanvas("inv", false);
-            ToggleUICanvas("player", false);
-
-            ToggleUICanvas("pause", true);
+            uip_gameplay.SetActive(false);
+            uip_controls.SetActive(false);
+            uip_pause.SetActive(true);
         }
         else if (!toggle && GameManager.current.gameState == GameState.pause)
         {
             GameManager.current.gameState = GameState.gameplay;
-            ToggleUICanvas("pause", false);
-            if (invOpened)
-            {
-                ToggleUICanvas("inv", true);
-            }
-            else
-            {
-                ToggleUICanvas("scr_effect", true);
-                ToggleUICanvas("msg", true);
-                ToggleUICanvas("controls", true);
-                ToggleUICanvas("player", true);
-            }
+
+            uip_gameplay.SetActive(true);
+            uip_controls.SetActive(true);
+            uip_pause.SetActive(false);
         }
     }
 
-    public void CloseCustomization()
+    public void ToggleCustomization(bool state)
     {
         if (GameManager.current.gameState == GameState.mainmenu)
         {
-            ToggleUICanvas("custom", false);
-            ToggleUICanvas("mainmenu", true);
+            c_customization.enabled = state;
+            c_mainmenu.enabled = !state;
+
+            CustomizationMenu.current.ToggleCustomization(state);
         }
     }
 
-    public void CloseSettings()
+    public void ToggleSettings(bool state)
     {
-        if (IsUICanvasActive("settings"))
+        if (GameManager.current.gameState == GameState.mainmenu)
         {
-            if (GameManager.current.gameState == GameState.mainmenu)
-            {
-                ToggleUICanvas("settings", false);
-                ToggleUICanvas("mainmenu", true);
-            }
-            else if (GameManager.current.gameState == GameState.pause)
-            {
-                ToggleUICanvas("settings", false);
-                ToggleUICanvas("pause", true);
-            }
-        }
-    }
-
-    //--- UICanvas togglers ---
-    public void EnableUICanvas(string tag)
-    {
-        ToggleUICanvas(tag, true);
-    }
-    public void DisableUICanvas(string tag)
-    {
-        ToggleUICanvas(tag, false);
-    }
-    public void ToggleUICanvas(string tag, bool state)
-    {
-        _toggleUICanvas(tag.GetHashCode(), state);
-    }
-    public void ToggleUICanvas(int tagHash, bool state)
-    {
-        _toggleUICanvas(tagHash, state);
-    }
-
-    void _toggleUICanvas(int tagHash, bool enable)
-    {
-        var target = canvas.Find(x => x.tagHash == tagHash);
-
-        if (target != null)
-        {
-            if (tagHash == "mainmenu".GetHashCode())
-            {
-                if (enable)
-                {
-                    for (int i = 0; i < target.go.transform.childCount; i++)
-                    {
-                        target.go.transform.GetChild(i).gameObject.SetActive(i == 0);
-                    }
-                }
-            }
-            if (tagHash == "controls".GetHashCode())
-            {
-                /*for (int i = 1; i < target.canvas.Length; i++)
-                {
-                    target.canvas[i].gameObject.SetActive(enable);
-                }*/
-                for (int i = 0; i < target.canvas.Length; i++) { target.canvas[i].enabled = enable; }
-            }
-            if (tagHash == "inv".GetHashCode() && !enable)
-            {
-                InventoryUI.current.OnInventoryClosed();
-            }
-            if (tagHash == "custom".GetHashCode())
-            {
-                if (enable)
-                {
-                    CustomizationMenu.current.OnCustomizationOpened();
-                }
-                else
-                {
-                    CustomizationMenu.current.OnCustomizationClosed();
-                }
-            }
-            target.canvas[0].enabled = enable;
-            //for (int i = 0; i < target.canvas.Length; i++) { target.canvas[i].enabled = enable; }
+            c_settings.enabled = state;
+            c_mainmenu.enabled = !state;
         }
         else
         {
-            Debug.LogError("Can't find canvas packet tagged as \'" + tagHash + "\'");
-        }
-    }
-
-    public void DisableAllUICanvas()
-    {
-        foreach (CanvasPacket c in canvas)
-        {
-            for (int i = 0; i < c.canvas.Length; i++) { c.canvas[i].enabled = false; }
-        }
-    }
-
-    public bool IsUICanvasActive(string tag)
-    {
-        var target = canvas.Find(x => x.tagHash == tag.GetHashCode());
-
-        if (target != null)
-        {
-            return target.canvas[0].enabled;
-        }
-        else
-        {
-            Debug.LogError("Can't find canvas packet tagged as \'" + tag + "\'");
-            return false;
+            c_settings.enabled = state;
+            c_pause.enabled = !state;
         }
     }
 }
-
-[System.Serializable]
-public class CanvasPacket
-{
-    [HideInInspector]public string name;
-    public string tag;
-    public GameObject go;
-    public Canvas[] canvas;
-    public int tagHash;
-
-    public CanvasPacket(GameObject newGO)
-    {
-        go = newGO;
-        name = go.name;
-        tag = name;
-        tagHash = tag.GetHashCode();
-
-        canvas = go.GetComponentsInChildren<Canvas>();
-    }
-}
-
-#if UNITY_EDITOR
-[CustomEditor(typeof(GameUI))]
-public class GameUIEditor : Editor
-{
-    GameUI script;
-    bool showAssets;
-    public override void OnInspectorGUI()
-    {
-        base.OnInspectorGUI();
-
-        if (script == null) script = (GameUI)target;
-        if (GUILayout.Button("UpdateCanvasList"))
-        {
-            script.UpdateCanvasList();
-        }
-
-    }
-}
-#endif

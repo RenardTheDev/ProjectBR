@@ -126,6 +126,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8785455657ba2a045a0c4f400df35609, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pickup:
+    go: {fileID: 0}
+    item: {fileID: 0}
+    w_item: {fileID: 0}
+    activeTime: 0
   item: {fileID: 11400000, guid: b697140368d973343a2160bfd6c137d4, type: 2}
   amount: 1
 --- !u!1 &1838397902363817366

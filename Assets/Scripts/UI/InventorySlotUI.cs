@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class InventorySlotUI : MonoBehaviour, IPointerDownHandler, IPointerClickHandler, IPointerUpHandler
 {
-    public RectTransform rt;
+    RectTransform _rt;
     public InventorySlot slot;
 
     public Text nameLabel;
@@ -18,7 +18,7 @@ public class InventorySlotUI : MonoBehaviour, IPointerDownHandler, IPointerClick
 
     private void Awake()
     {
-        rt = GetComponent<RectTransform>();
+        _rt = GetComponent<RectTransform>();
     }
 
     public void AssignInfo(InventorySlot slot)
@@ -75,5 +75,15 @@ public class InventorySlotUI : MonoBehaviour, IPointerDownHandler, IPointerClick
     public void OnPointerClick(PointerEventData eventData)
     {
         InventoryUI.current.OnItemClicked(slot);
+    }
+
+    public RectTransform rt()
+    {
+        if (_rt == null)
+        {
+            _rt = GetComponent<RectTransform>();
+
+        }
+        return _rt;
     }
 }

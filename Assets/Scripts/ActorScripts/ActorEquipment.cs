@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,12 +9,17 @@ public class ActorEquipment : MonoBehaviour
     ActorEvents events;
     ActorMotor motor;
     ActorLook look;
-    Animator anim;
+    ActorWeapon weapon;
     ActorInventory inv;
 
+    Animator anim;
+
     public WeaponSlot[] slots;
+    public int currSlotID;
     public WeaponSlot currSlot;
     public Transform WeaponHolder;
+    public Transform WeaponPivot;
+    Transform rh;
 
     public bool isArmed;
 
@@ -23,13 +29,17 @@ public class ActorEquipment : MonoBehaviour
         events = GetComponent<ActorEvents>();
         look = GetComponent<ActorLook>();
         motor = GetComponent<ActorMotor>();
-        anim = GetComponent<Animator>();
         inv = GetComponent<ActorInventory>();
+        weapon = GetComponent<ActorWeapon>();
+
+        anim = GetComponent<Animator>();
+
+        rh = anim.GetBoneTransform(HumanBodyBones.RightHand);
     }
 
     private void Start()
     {
-        
+        currSlot = slots[currSlotID];
     }
 
     public void ChangeSlot(int id)
@@ -42,58 +52,93 @@ public class ActorEquipment : MonoBehaviour
             }
             else
             {
-                DrawCurrentWeapon();
+                DrawWeaponSlot(currSlot);
             }
         }
         else
         {
             if (id < slots.Length)
             {
-                if (isArmed) HolsterCurrentWeapon();
-                DrawWeapon(id);
+                if (id != currSlotID)
+                {
+                    DrawWeapon(id);
+                }
             }
         }
     }
 
-    void DrawCurrentWeapon()
-    {
-
-    }
-
     void DrawWeapon(int slot)
     {
-        currSlot = slots[slot];
+        currSlotID = slot;
+        DrawWeaponSlot(slots[currSlotID]);
+    }
+
+    void DrawWeaponSlot(int slotID)
+    {
+        DrawWeaponSlot(slots[slotID]);
+    }
+
+    void DrawWeaponSlot(WeaponSlot slot)
+    {
+        HolsterCurrentWeapon();
+
+        currSlot = slot;
+
+        currSlot.go.SetActive(true);
+        currSlot.entity.Draw();
+
+        isArmed = true;
+
+        OnSlotDraw?.Invoke(currSlot);
     }
 
     void HolsterCurrentWeapon()
     {
+        if (isArmed)
+        {
+            isArmed = false;
+            currSlot.entity.Holster();
+            currSlot.go.SetActive(false);
 
+            OnSlotHolster?.Invoke(currSlot);
+        }
     }
 
     public WeaponSlot AssignWeaponToSlot(int slot, WeaponDATA data)
     {
         if (slots[slot].entity != null)
         {
-            Destroy(slots[slot].entity.gameObject);
-
             slots[slot].ClearWeapon();
         }
 
-        var go = Instantiate(data.prefab);
-        slots[slot].AssignWeapon(go.GetComponent<WeaponEntity>());
+        var wEnt = EquipmentManager.current.SpawnEQP(data, WeaponHolder);
 
-        go.transform.parent = WeaponHolder;
-        go.transform.localPosition = Vector3.zero;
-        go.transform.localRotation = Quaternion.identity;
+        wEnt.AssignHandler(actor, motor, weapon, this, events);
+        slots[slot].AssignWeapon(wEnt);
+
+        if (currSlot == slots[slot] && !isArmed)
+        {
+            DrawWeaponSlot(currSlot);
+        }
+        else
+        {
+            slots[slot].go.SetActive(false);
+            wEnt.Holster();
+        }
 
         return slots[slot];
     }
 
     public int GetCurrentAmmo()
     {
-        if (currSlot.caliber != null)
+        return GetAmmo(currSlot);
+    }
+
+    public int GetAmmo(WeaponSlot slot)
+    {
+        if (slot.caliber != null)
         {
-            return inv.inventory.GetQuantity(currSlot.caliber.invItem);
+            return inv.inventory.GetQuantity(slot.caliber.invItem);
         }
         else
         {
@@ -105,33 +150,35 @@ public class ActorEquipment : MonoBehaviour
     {
         inv.inventory.RemoveItem(currSlot.caliber.invItem, amount);
     }
+
+    public event Action<WeaponSlot> OnSlotHolster;
+    public event Action<WeaponSlot> OnSlotDraw;
 }
 
 [System.Serializable]
 public class WeaponSlot
 {
-    public bool isSelected;
+    public GameObject go;
     public WeaponEntity entity;
 
-    //public int clip;
+    public bool isSelected;
 
-    //--- links ---
-    public AmmoDATA caliber;
-
-    public bool IsEmpty()
-    {
-        return entity == null;
-    }
+    //--- shortcuts ---
+    public int clip { get => entity.clip; }
+    public WeaponDATA data { get => entity.data; }
+    public AmmoDATA caliber { get => entity.data.ammoType; }
+    public bool chambered { get => entity.isChambered; }
+    public bool isEmpty { get => entity == null; }
 
     public void AssignWeapon(WeaponEntity newEntity)
     {
         entity = newEntity;
-        caliber = entity.data.ammoType;
+        go = entity.gameObject;
     }
 
     public void ClearWeapon()
     {
         entity = null;
-        caliber = null;
+        EquipmentManager.current.HideEQP(go);
     }
 }

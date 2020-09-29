@@ -200,7 +200,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2582,7 +2582,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -4540,11 +4540,10 @@ GameObject:
   - component: {fileID: 6805610069425060691}
   - component: {fileID: 9196441056570324390}
   - component: {fileID: -2322636574696542903}
-  - component: {fileID: -6530287764305420977}
   - component: {fileID: 9196441056570324391}
   - component: {fileID: 4287004977001478146}
   - component: {fileID: 6805610069425060690}
-  - component: {fileID: 9196441056570324389}
+  - component: {fileID: -6530287764305420977}
   - component: {fileID: 982267757487006557}
   - component: {fileID: 5432468474445554905}
   m_Layer: 8
@@ -4644,34 +4643,6 @@ MonoBehaviour:
   inventory:
     container: []
   generateUniqContainer: 1
---- !u!114 &-6530287764305420977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9196441056570324410}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ceeffb0ed74e8a41a03e5b8b12955b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slots:
-  - isSelected: 0
-    entity: {fileID: 0}
-    caliber: {fileID: 0}
-  - isSelected: 0
-    entity: {fileID: 0}
-    caliber: {fileID: 0}
-  - isSelected: 0
-    entity: {fileID: 0}
-    caliber: {fileID: 0}
-  currSlot:
-    isSelected: 0
-    entity: {fileID: 0}
-    caliber: {fileID: 0}
-  WeaponHolder: {fileID: 1857324842886830480}
-  isArmed: 0
 --- !u!114 &9196441056570324391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4723,6 +4694,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponHolder: {fileID: 1857324842886830480}
+  weaponPivot: {fileID: 1418356763048157865}
+  rh: {fileID: 6903630123387912394}
   crouchSpeed: 1.8
   runSpeed: 4
   sprintSpeed: 6
@@ -4735,13 +4708,20 @@ MonoBehaviour:
   aiming: 0
   grounded: 0
   dirLock_fade: 0
+  lookAt: {x: 0, y: 0, z: 0}
+  lookAtVector: {x: 0, y: 0, z: 0}
+  aimEuler: {x: 0, y: 0, z: 0}
+  pitch: 0
+  heading: 0
+  yaw: 0
   inpDirection: {x: 0, y: 0, z: 0}
   moveDir: {x: 0, y: 0, z: 0}
   turnSmoothTime: 0.1
   turnSmoothVelocity: 0
   rootm: 0
+  weap_to_rh: 0
   hardLanding_threshold: -10
---- !u!114 &9196441056570324389
+--- !u!114 &-6530287764305420977
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4750,15 +4730,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 9196441056570324410}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9bec8ca60b12294bb1de9f45915063e, type: 3}
+  m_Script: {fileID: 11500000, guid: 3ceeffb0ed74e8a41a03e5b8b12955b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lookAt: {x: 0, y: 0, z: 0}
-  lookAtVector: {x: 0, y: 0, z: 0}
-  aimEuler: {x: 0, y: 0, z: 0}
-  pitch: 0
-  heading: 0
-  yaw: 0
+  slots:
+  - go: {fileID: 0}
+    entity: {fileID: 0}
+    isSelected: 0
+  - go: {fileID: 0}
+    entity: {fileID: 0}
+    isSelected: 0
+  - go: {fileID: 0}
+    entity: {fileID: 0}
+    isSelected: 0
+  currSlotID: 0
+  currSlot:
+    go: {fileID: 0}
+    entity: {fileID: 0}
+    isSelected: 0
+  WeaponHolder: {fileID: 1857324842886830480}
+  WeaponPivot: {fileID: 1418356763048157865}
+  isArmed: 0
 --- !u!114 &982267757487006557
 MonoBehaviour:
   m_ObjectHideFlags: 0

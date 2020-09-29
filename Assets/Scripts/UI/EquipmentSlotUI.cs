@@ -22,44 +22,22 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler
     public Image mark;
     public Image select;
 
-    ActorEquipment currEqp;
-    WeaponSlot currSlot;
-    //WeaponDATA currData;
+    ActorEquipment eqp;
+    WeaponSlot slot;
+
+    bool toggle = false;
 
     public Color[] selColors;
 
+    private void Awake()
+    {
+        ToggleSlotUI(false);
+    }
+
     public void AssignActor(ActorEquipment eqp)
     {
-        currEqp = eqp;
-        AssignSlot(eqp.currSlot);
-    }
-
-    public void AssignSlot(WeaponSlot slot)
-    {
-        currSlot = slot;
-        //if (!slot.IsEmpty()) AssignWeapon(slot.entity.data);
-
-        ToggleSlotUI(true);
-    }
-
-    /*public void AssignWeapon(WeaponDATA data)
-    {
-        currData = data;
-
-        namePlateRect.gameObject.SetActive(true);
-        ammoPlateRect.gameObject.SetActive(true);
-        icon.gameObject.SetActive(true);
-        mark.gameObject.SetActive(true);
-
-        UpdateSlotPalte();
-    }*/
-
-    public void ClearWeapon()
-    {
-        currSlot = null;
-        //currData = null;
-
-        ToggleSlotUI(false);
+        this.eqp = eqp;
+        slot = eqp.slots[slotID];
     }
 
     private void Update()
@@ -69,15 +47,20 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler
 
     void ToggleSlotUI(bool state)
     {
-        namePlateRect.gameObject.SetActive(state);
-        ammoPlateRect.gameObject.SetActive(state);
-        icon.gameObject.SetActive(state);
-        mark.gameObject.SetActive(state);
+        if (toggle != state)
+        {
+            namePlateRect.gameObject.SetActive(state);
+            ammoPlateRect.gameObject.SetActive(state);
+            icon.gameObject.SetActive(state);
+            mark.gameObject.SetActive(state);
+
+            toggle = state;
+        }
     }
 
     public void UpdateSlotPlate()
     {
-        if (currSlot.IsEmpty())
+        if (slot.isEmpty)
         {
             ToggleSlotUI(false);
         }
@@ -85,18 +68,18 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler
         {
             ToggleSlotUI(true);
 
-            nameLabel.text = currSlot.entity.data.Name;
+            nameLabel.text = slot.entity.data.Name;
             nameLabel.rectTransform.sizeDelta = new Vector2(nameLabel.preferredWidth, 32);
             namePlateRect.sizeDelta = new Vector2(nameLabel.preferredWidth + 8, 20);
 
-            ammoLabel.text = currSlot.entity.clip + "/" + currEqp.GetCurrentAmmo();
+            ammoLabel.text = slot.entity.clip + "/" + eqp.GetAmmo(slot);
             ammoLabel.rectTransform.sizeDelta = new Vector2(ammoLabel.preferredWidth, 32);
             ammoPlateRect.sizeDelta = new Vector2(ammoLabel.preferredWidth + 8, 20);
 
-            icon.sprite = currSlot.entity.data.icon;
+            icon.sprite = slot.entity.data.icon;
 
             if (selColors != null && selColors.Length > 1)
-                mark.color = currSlot.isSelected ? selColors[1] : selColors[0];
+                mark.color = slot.isSelected ? selColors[1] : selColors[0];
         }
     }
 

@@ -15,7 +15,7 @@ MonoBehaviour:
   Name: Steyr SSG
   prefab_w: {fileID: 3969893643690827968, guid: bbe9e59619a06cc4788ae38b69994056,
     type: 3}
-  icon: {fileID: 6025420991154104967, guid: e7b3af74a5868c44285ffcd1b1082864, type: 3}
+  icon: {fileID: 21300000, guid: 61aa51c5e3a557147856500064e9b584, type: 3}
   type: 1
   weight: 5
   canStack: 0

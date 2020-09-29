@@ -19,15 +19,6 @@ public class ActorInventory : MonoBehaviour
         }
     }
 
-    /*private void OnTriggerEnter(Collider other)
-    {
-        var item = other.GetComponentInParent<Item>();
-        if (item)
-        {
-            PickUpItem(item);
-        }
-    }*/
-
     public void PickUpItem(Item _item)
     {
         inventory.AddItem(_item.item, _item.amount);

@@ -34,17 +34,13 @@ public class PlayerUI : MonoBehaviour
 
     [Header("Hitmarker")]
     public GameObject hm_base;
-    public AnimationCurve fillCurve;
-
     float hm_scrTime = 0.2f;
     Image[] hm_parts;
-    float hm_fill;
 
     [Header("Weapon")]
     public GameObject weaponPanel;
     public Vector3 wPanelOffset;
     public Image weaponIcon_first;
-    public Image weaponIcon_second;
     public Image clipFill;
     public Text clip;
     public Color activeClip = Color.white;
@@ -52,16 +48,9 @@ public class PlayerUI : MonoBehaviour
 
     RectTransform wPanelTrans;
     RectTransform crosshair;
-    WeaponEntity currWeapon;
-    int clipFontSize = 32;
-    int ammoFontSize = 24;
-
-    [Header("Buttons")]
-    float lastPickup;
-    public RectTransform pickupHintBase;
-    public RectTransform pickupNamePlate;
-    public Text pickupName;
-    Vector3 hintPoint;
+    WeaponSlot slot;
+    public int clipFontSize = 32;
+    public int ammoFontSize = 24;
 
     //[Header("Inventory")]
     bool isInvOpen;
@@ -71,6 +60,7 @@ public class PlayerUI : MonoBehaviour
     ActorEvents playerEvents;
     ActorMotor playerMotor;
     ActorWeapon playerWeapon;
+    ActorEquipment playerEqp;
 
     private void Awake()
     {
@@ -89,12 +79,12 @@ public class PlayerUI : MonoBehaviour
 
         hm_parts = hm_base.GetComponentsInChildren<Image>();
         crosshair = ui_crosshair.GetComponent<RectTransform>();
+
+        ToggleWeaponUI(false);
     }
 
     private void Start()
     {
-        UpdateWeaponInfoPanel();
-
         GlobalEvents.current.onActorGetHit += OnActorGetHit;
         GlobalEvents.current.onActorHealed += OnActorHealed;
         GlobalEvents.current.onActorKilled += OnActorKilled;
@@ -133,8 +123,6 @@ public class PlayerUI : MonoBehaviour
         scrRatio = (float)Screen.width / Screen.height;
 
         //---HEALTH---
-
-        //hpBar.fillAmount = playerActor.Health / playerActor.maxHealth;
 
         if (playerActor.isAlive)
         {
@@ -176,25 +164,14 @@ public class PlayerUI : MonoBehaviour
             }
         }
 
-        //---Hitmarker---
-
-        if (hm_base.activeSelf)
-        {
-            hm_fill = Mathf.MoveTowards(hm_fill, 0, Time.deltaTime / hm_scrTime);
-            for (int i = 0; i < hm_parts.Length; i++)
-            {
-                hm_parts[i].fillAmount = fillCurve.Evaluate(hm_fill);
-            }
-        }
-
         //---WEAPON---
-        /*if (crosshair.gameObject.activeSelf)
+        if (crosshair.gameObject.activeSelf)
         {
-            if (playerWeapon.isArmed)
+            if (playerEqp.isArmed)
             {
-                crosshair.sizeDelta = new Vector2(playerWeapon.currWEntity.spread * 64 + 8, playerWeapon.currWEntity.spread * 64 + 8);
+                crosshair.sizeDelta = new Vector2(playerEqp.currSlot.entity.spread * 64 + 8, playerEqp.currSlot.entity.spread * 64 + 8);
                 
-                if (playerMotor.aiming && playerWeapon.currWData.hasScope)
+                if (playerMotor.aiming && playerEqp.currSlot.entity.data.hasScope)
                 {
                     crosshair.gameObject.SetActive(false);
                 }
@@ -202,8 +179,8 @@ public class PlayerUI : MonoBehaviour
         }
         else
         {
-            if (playerWeapon.isArmed && !(playerMotor.aiming && playerWeapon.currWData.hasScope)) crosshair.gameObject.SetActive(true);
-        }*/
+            if (playerEqp.isArmed && !(playerMotor.aiming && playerEqp.currSlot.entity.data.hasScope)) crosshair.gameObject.SetActive(true);
+        }
     }
 
     private void OnActorGetHit(Actor actor, Damage damage)
@@ -237,14 +214,13 @@ public class PlayerUI : MonoBehaviour
         }
         else
         {
-            if (damage.attacker.isPlayer)
+            if (damage.attacker.isPlayer && !actor.isPlayer)
             {
                 GMSurvival.current.ActionLog_Damage(actor, damage, false);
 
                 for (int i = 0; i < hm_parts.Length; i++)
                 {
                     hm_parts[i].color = Color.white;
-                    hm_fill = 1;
                 }
 
                 if (hm_coroutine != null) StopCoroutine(hm_coroutine);
@@ -256,8 +232,21 @@ public class PlayerUI : MonoBehaviour
     Coroutine hm_coroutine;
     IEnumerator ProcessHitmarker()
     {
-        hm_base.SetActive(true);
-        yield return new WaitForSeconds(hm_scrTime);
+        hm_base.SetActive(true); 
+        for (int i = 0; i < hm_parts.Length; i++)
+        {
+            hm_parts[i].fillAmount = 1;
+        }
+
+        while (hm_parts[0].fillAmount > 0)
+        {
+            yield return new WaitForEndOfFrame();
+            for (int i = 0; i < hm_parts.Length; i++)
+            {
+                hm_parts[i].fillAmount = Mathf.MoveTowards(hm_parts[i].fillAmount, 0, Time.deltaTime);
+            }
+        }
+
         hm_base.SetActive(false);
     }
 
@@ -281,7 +270,6 @@ public class PlayerUI : MonoBehaviour
             for (int i = 0; i < hm_parts.Length; i++)
             {
                 hm_parts[i].color = Color.red;
-                hm_fill = 1;
             }
 
             if (hm_coroutine != null) StopCoroutine(hm_coroutine);
@@ -297,47 +285,23 @@ public class PlayerUI : MonoBehaviour
         ToggleUIElement(player_ui_element.all, true);
     }
 
-    private void OnSlotChanged(int oldSlot, int newSlot, WeaponSlot[] slotInfo)
-    {
-        weaponPanel.SetActive(slotInfo.Length > 0 && slotInfo[newSlot].entity.data.type != WeaponType.Melee);
-
-        /*if (slotInfo.Length == 0) return;
-
-        if (!playerWeapon.IsEntityEmpty(oldSlot))
-            ShowSecondWeapIcon(playerWeapon.GetWData(oldSlot).icon);
-        else
-            HideSecondWeapIcon();
-
-        UpdateWeaponInfoPanel();
-
-        if (playerWeapon.currWData.type == WeaponType.Melee)
-        {
-            ToggleUIElement(player_ui_element.weapon, false);
-        }*/
-    }
-
     private void OnWeaponShot(WeaponDATA data)
     {
-        UpdateWeaponInfoPanel();
+
     }
     private void OnWeaponChambered()
     {
-        UpdateWeaponInfoPanel();
+
     }
 
     private void OnWeaponShellInserted()
     {
-        UpdateWeaponInfoPanel();
+
     }
 
     private void OnWeaponReloaded()
     {
-        UpdateWeaponInfoPanel();
-    }
 
-    private void OnAmmoPickedUp(AmmoDATA caliber, int amount)
-    {
-        UpdateWeaponInfoPanel();
     }
 
     public void AssignPlayer(Actor playerActor)
@@ -346,12 +310,13 @@ public class PlayerUI : MonoBehaviour
         playerInv = playerActor.GetComponent<ActorInventory>();
         playerMotor = playerActor.GetComponent<ActorMotor>();
         playerWeapon = playerActor.GetComponent<ActorWeapon>();
+        playerEqp = playerActor.GetComponent<ActorEquipment>();
         playerEvents = playerActor.GetComponent<ActorEvents>();
 
         hpBar.fillAmount = playerActor.Health / playerActor.maxHealth;
 
-        playerWeapon.OnSlotChanged += OnSlotChanged;
-        playerWeapon.OnAmmoPickedup += OnAmmoPickedUp;
+        playerEqp.OnSlotDraw += OnSlotDraw;
+        playerEqp.OnSlotHolster += OnSlotHolster;
 
         playerEvents.onWeaponShot += OnWeaponShot;
         playerEvents.onWeaponReloadEnd += OnWeaponReloaded;
@@ -361,66 +326,35 @@ public class PlayerUI : MonoBehaviour
         ToggleUIElement(player_ui_element.all, true);
     }
 
+    private void OnSlotHolster(WeaponSlot slot)
+    {
+        Debug.Log($"OnSlotHolster({slot.data.Name});");
+        this.slot = slot;
+        ToggleWeaponUI(false);
+    }
+
+    private void OnSlotDraw(WeaponSlot slot)
+    {
+        Debug.Log($"OnSlotDraw({slot.data.Name});");
+        this.slot = slot;
+        ToggleWeaponUI(true);
+    }
+
     public void ClearPlayer()
     {
-        playerWeapon.OnSlotChanged -= OnSlotChanged;
-        playerWeapon.OnAmmoPickedup -= OnAmmoPickedUp;
-
         playerEvents.onWeaponShot -= OnWeaponShot;
         playerEvents.onWeaponReloadEnd -= OnWeaponReloaded;
         playerEvents.onWeaponShellInsert -= OnWeaponShellInserted;
         playerEvents.onWeaponChambered -= OnWeaponChambered;
+
+        playerEqp.OnSlotDraw -= OnSlotDraw;
+        playerEqp.OnSlotHolster -= OnSlotHolster;
 
         playerActor = null;
         playerMotor = null;
         playerWeapon = null;
 
         ToggleUIElement(player_ui_element.all, false);
-    }
-
-    void UpdateWeaponInfoPanel()
-    {
-        if (playerActor == null) return;
-
-        /*currWeapon = playerWeapon.currWEntity;
-
-        if (currWeapon != null)
-        {
-            clipFill.fillAmount = (float)currWeapon.clip / currWeapon.data.clipSize;
-
-            weaponIcon_first.sprite = currWeapon.data.icon;
-
-            if (playerWeapon.currCaliber == null)
-            {
-                clip.text = "";
-            }
-            else
-            {
-                if (playerWeapon.GetCurrentAmmo() > 0)
-                {
-                    clip.text = "<size=" + clipFontSize + ">" + currWeapon.clip + "</size><size=" + ammoFontSize + ">/" + playerWeapon.GetCurrentAmmo() + "</size>";
-                }
-                else
-                {
-                    clip.text = "<size=" + clipFontSize + ">" + currWeapon.clip + "</size>";
-                }
-            }
-
-            clip.color = (currWeapon.chambered && currWeapon.clip > 0) ? activeClip : emptyClip;
-        }*/
-    }
-
-    void ShowSecondWeapIcon(Sprite icon)
-    {
-        weaponIcon_second.transform.parent.gameObject.SetActive(true);
-        weaponIcon_second.enabled = true;
-        weaponIcon_second.sprite = icon;
-    }
-
-    void HideSecondWeapIcon()
-    {
-        weaponIcon_second.enabled = false;
-        weaponIcon_second.transform.parent.gameObject.SetActive(false);
     }
 
     public void ToggleUIElement(player_ui_element element, bool state)
@@ -451,16 +385,64 @@ public class PlayerUI : MonoBehaviour
             default:
                 break;
         }
-
-        //--- conditional ---
-        /*if (playerWeapon != null && playerWeapon.currWData != null)
-        {
-            if (playerWeapon.currWData.type == WeaponType.Melee)
-            {
-                ui_weapon.SetActive(false);
-            }
-        }*/
     }
+
+    public void ToggleWeaponUI(bool toggle)
+    {
+        if (ui_weapon.activeSelf != toggle)
+        {
+            if (ui_weapon_update != null) StopCoroutine(ui_weapon_update);
+            ui_weapon.SetActive(toggle);
+            if (toggle) ui_weapon_update = StartCoroutine(WeaponPanelUpdater());
+        }
+    }
+
+    Coroutine ui_weapon_update;
+    IEnumerator WeaponPanelUpdater()
+    {
+        Debug.Log("WeaponPanelUpdater();");
+        while (ui_weapon.activeSelf)
+        {
+            UpdateWeaponUI();
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
+    public void UpdateWeaponUI()
+    {
+        Debug.Log("UpdateWeaponUI();");
+
+        if (!playerEqp.isArmed || slot.isEmpty)
+        {
+            ToggleWeaponUI(false);
+            return;
+        }
+
+        ToggleWeaponUI(true);
+
+        clipFill.fillAmount = (float)slot.entity.clip / slot.entity.data.clipSize;
+
+        weaponIcon_first.sprite = slot.data.icon;
+
+        if (slot.caliber == null)
+        {
+            clip.text = "";
+        }
+        else
+        {
+            if (playerEqp.GetCurrentAmmo() > 0)
+            {
+                clip.text = $"<size={clipFontSize}>{slot.clip}</size><size={ammoFontSize}> / {playerEqp.GetCurrentAmmo()}</size>";
+            }
+            else
+            {
+                clip.text = $"<size={clipFontSize}>{slot.clip}</size>";
+            }
+        }
+
+        clip.color = (slot.chambered && slot.clip > 0) ? activeClip : emptyClip;
+    }
+    
 
     [Header("Game message")]
     public Image gameMsgFiller;

@@ -42,9 +42,8 @@ public class Actor : MonoBehaviour
 
         if (isPlayer)
         {
-            FindObjectOfType<PlayerUI>().AssignPlayer(this);
             PLAYERACTOR = this;
-
+            PlayerUI.current.AssignPlayer(this);
             InventoryUI.current.AssignPlayer(this);
         }
     }

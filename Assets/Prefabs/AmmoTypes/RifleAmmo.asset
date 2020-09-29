@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: RifleAmmo
   m_EditorClassIdentifier: 
   Name: Rifle ammo
-  mass: 6.6
-  pellets: 1
   maxTravel: 1000
   color: {r: 1, g: 0.5882353, b: 0.19607843, a: 1}
   boxMat: {fileID: 2100000, guid: 700c456b3010e2b47bdf01f58b098135, type: 2}
+  invItem: {fileID: 11400000, guid: 01e0985f2a2b0d545bcc5ef2b7cdf7f2, type: 2}

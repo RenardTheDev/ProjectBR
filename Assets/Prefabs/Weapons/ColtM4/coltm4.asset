@@ -16,7 +16,7 @@ MonoBehaviour:
   type: 0
   prefab: {fileID: 7912189485573948516, guid: e9acd42d8bf13334c8f72702a638bc3b, type: 3}
   inv_object: {fileID: 11400000, guid: a22164f21c069894894d4a2a3a823eca, type: 2}
-  icon: {fileID: 8086831003865027512, guid: 4e08aa55c032db14087e4fc7b663af81, type: 3}
+  icon: {fileID: 21300000, guid: 070eb38712491114b902d798ff95b9ea, type: 3}
   sfx_shot: {fileID: 8300000, guid: c77879b48b11ab9438d21a7087918af0, type: 3}
   sfx_chamber: {fileID: 8300000, guid: cf5d4f0ffffc9054181a32c422dc7484, type: 3}
   sfx_insert: {fileID: 8300000, guid: 1b1d00195536a224d8e2054cb40100fd, type: 3}
@@ -47,13 +47,13 @@ MonoBehaviour:
   bonePivot: 12
   offset: {x: 0, y: 0, z: 0}
   sprintPivot: 18
-  sprintOffset: {x: -0.15, y: -0.15, z: 0.1}
-  sprintAngle: {x: 0, y: 100, z: 120}
+  inHandOffset: {x: -0.15, y: -0.18, z: 0}
+  inHandRotation: {x: 0, y: 80, z: 100}
   sprintHIK:
   - 1
   - 0
   grip: 1
-  hPosition: {x: -0.15, y: 0.3, z: 0.06}
+  hPosition: {x: -0.15, y: 0.3, z: 0.05}
   hRotation: {x: 60, y: 90, z: 0}
   animRel_full: {fileID: 7400000, guid: ad2ce61325957bb4194cf04939f38eaa, type: 2}
   animRel_tactical: {fileID: 7400000, guid: 1f2aae0b6b4013f48867c5f31e5c6acc, type: 2}

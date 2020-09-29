@@ -88,7 +88,7 @@ public class CharacterManager : MonoBehaviour
         cp.gObj.transform.position = position;
         cp.gObj.transform.rotation = rotation;
 
-        cp.look.heading = rotation.eulerAngles.y;
+        cp.motor.heading = rotation.eulerAngles.y;
 
         return cp.actor;
     }

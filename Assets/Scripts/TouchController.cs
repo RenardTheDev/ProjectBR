@@ -18,8 +18,7 @@ public class TouchController : MonoBehaviour
     public FixedButton button_crouch;
     public FixedButton button_sprint;
 
-    public FixedButton button_changeGun;
-    public FixedButton button_pickup;
+    public FixedButton button_equipment;
 
     public FixedButton button_inventory;
 
@@ -45,8 +44,7 @@ public class TouchController : MonoBehaviour
         Controls.reload.state = button_reload.state;
         Controls.aim.state = button_aim.state;
 
-        Controls.changeGun.state = button_changeGun.state;
-        Controls.pickup.state = button_pickup.state;
+        Controls.eqipment.state = button_equipment.state;
 
         Controls.inventory.state = button_inventory.state;
 
@@ -94,8 +92,7 @@ public static class Controls
     public static ControlsBind reload = new ControlsBind("reload");
     public static ControlsBind aim = new ControlsBind("aim");
 
-    public static ControlsBind changeGun = new ControlsBind("swap");
-    public static ControlsBind pickup = new ControlsBind("pickup");
+    public static ControlsBind eqipment = new ControlsBind("equipment");
 
     public static ControlsBind inventory = new ControlsBind("inventory");
 

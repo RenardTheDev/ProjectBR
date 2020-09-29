@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: BerettaM9
   m_EditorClassIdentifier: 
   Name: Beretta M9
-  prefab_w: {fileID: 8695735231800095845, guid: 9e4120e41261b5c46a9bf77e7a06c8fc,
-    type: 3}
+  prefab_w: {fileID: 26739635993120519, guid: 2e9d6db050551f34e8ca9dd00024a77c, type: 3}
   icon: {fileID: 0}
   type: 1
   weight: 1

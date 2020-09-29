@@ -98,17 +98,19 @@ public class CustomizationMenu : MonoBehaviour
         }
     }
 
-    public void OnCustomizationOpened()
+    public void ToggleCustomization(bool state)
     {
-        SelectTypeTab(0);
-        anim.SetBool("cust", true);
-        ToggleZoom(false);
-    }
-
-    public void OnCustomizationClosed()
-    {
-        ToggleZoom(false);
-        anim.SetBool("cust", false);
+        if (state)
+        {
+            SelectTypeTab(0);
+            anim.SetBool("cust", true);
+            ToggleZoom(false);
+        }
+        else
+        {
+            ToggleZoom(false);
+            anim.SetBool("cust", false);
+        }
     }
 
     public void UpdateClothesUI()

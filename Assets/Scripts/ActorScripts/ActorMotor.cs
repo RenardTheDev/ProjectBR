@@ -6,13 +6,16 @@ public class ActorMotor : MonoBehaviour
 {
     Actor actor;
     ActorEvents events;
-    ActorLook look;
+    //ActorLook look;
     Animator animator;
-    ActorWeapon actWeapon;
+    ActorWeapon weap;
     ActorEquipment eqp;
     CharacterController character;
+    CameraControllerBase camControl;
 
     public Transform weaponHolder;
+    public Transform weaponPivot;
+    public Transform rh;
 
     public float crouchSpeed = 1.5f;
     public float runSpeed = 4f;
@@ -30,17 +33,32 @@ public class ActorMotor : MonoBehaviour
 
     public float dirLock_fade;
 
+    [Header("Look parameters")]
+    public Vector3 lookAt;
+    public Vector3 lookAtVector;
+    public Vector3 aimEuler;
+    public float pitch;
+    public float heading;
+    public float yaw;
+
+    bool useLookAt;
+    float lookLerp = 0;
+    Quaternion lookatQuat;
+    Vector3 lookAtLerp;
+
     Vector3 movement;
 
     private void Awake()
     {
         actor = GetComponent<Actor>();
         events= GetComponent<ActorEvents>();
-        look = GetComponent<ActorLook>();
+        //look = GetComponent<ActorLook>();
         animator = GetComponent<Animator>();
-        actWeapon = GetComponent<ActorWeapon>();
+        weap = GetComponent<ActorWeapon>();
         eqp = GetComponent<ActorEquipment>();
         character = GetComponent<CharacterController>();
+
+        camControl = CameraControllerBase.current;
 
         CrouchingInput(false);
     }
@@ -54,7 +72,7 @@ public class ActorMotor : MonoBehaviour
                 TouchController.current.button_crouch.OnStateChanged += OnPlayerControl_Crouch;
                 TouchController.current.button_aim.OnStateChanged += OnPlayerControl_Aim;
                 TouchController.current.button_sprint.OnStateChanged += OnPlayerControl_Sprint;
-                TouchController.current.button_changeGun.OnStateChanged += OnPlayerControl_ChangeGun;
+                TouchController.current.button_equipment.OnStateChanged += OnPlayerControl_Equipment;
             }
         }
 
@@ -74,7 +92,14 @@ public class ActorMotor : MonoBehaviour
     public Vector3 moveDir;
     public float turnSmoothTime = 0.1f;
     public float turnSmoothVelocity;
+
+    [Header("Animation curves")]
     public float rootm;
+    public float weap_to_rh;
+
+    Vector3 inpDirNormal;
+    float targetAngle;
+    float angle;
 
     private void Update()
     {
@@ -83,32 +108,14 @@ public class ActorMotor : MonoBehaviour
             inpDirection = new Vector3(Controls.move.x, 0, Controls.move.y);
             if (sprinting)
             {
-                inpDirection = inpDirection.normalized;
-                
+                inpDirection = Vector3.ClampMagnitude(inpDirection, 1f);
             }
         }
 
         rootm = animator.GetFloat("rootm");
+        weap_to_rh = animator.GetFloat("weap_to_rh");
 
         dirLock_fade = Mathf.Lerp(dirLock_fade, (sprinting || !eqp.isArmed) ? 1f : 0f, Time.deltaTime * 3);
-
-        if (sprinting && inpDirection.magnitude < 0.1f)
-        {
-            ChangeSprintState(false);
-        }
-
-        if (inpDirection.magnitude >= 0.1f)
-        {
-            float targetAngle = Mathf.Atan2(inpDirection.x, inpDirection.z) * Mathf.Rad2Deg + look.heading;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime + (9999f * rootm));
-            transform.rotation = Quaternion.Euler(0, angle, 0);
-
-            moveDir = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
-        }
-        else
-        {
-            moveDir = Vector3.zero;
-        }
 
         if (crouching)
         {
@@ -124,15 +131,6 @@ public class ActorMotor : MonoBehaviour
             {
                 currentSpeed = Mathf.MoveTowards(currentSpeed, runSpeed, Time.deltaTime * 4);
             }
-
-            /*if (actWeapon.currWEntity != null)
-            {
-                currentSpeed = Mathf.Clamp(currentSpeed, 0, actWeapon.weapon[actWeapon.slot].entity.data.speedCap);
-            }
-            if (aiming)
-            {
-                currentSpeed = Mathf.Clamp(currentSpeed, 0, crouchSpeed);
-            }*/
         }
 
         movement = moveDir * currentSpeed * Time.deltaTime;
@@ -147,19 +145,149 @@ public class ActorMotor : MonoBehaviour
             airMomentum = -9.8f;
         }
 
-        if (character.enabled && animator.enabled)
+        if (character.enabled)
         {
-            animator.applyRootMotion = rootm > 0;
-            if (rootm < 1f)
+            animator.applyRootMotion = rootm > 0.1f;
+            if (rootm < 0.1f)
             {
-                character.Move(movement * (1f - rootm));
+                character.Move(movement * (1f - rootm * 10));
             }
 
             animator.SetBool("crouching", crouching);
-            animator.SetBool("grounded", crouching);
+            animator.SetBool("grounded", grounded);
+            animator.SetBool("usingGun", eqp.isArmed);
             animator.SetFloat("move_x", transform.InverseTransformVector(character.velocity).x, 0.05f, Time.deltaTime);
             animator.SetFloat("move_z", transform.InverseTransformVector(character.velocity).z, 0.05f, Time.deltaTime);
             animator.SetFloat("air_y", airVelocity.y);
+
+            if (eqp.isArmed)
+            {
+                float targetAngle = heading;
+                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime + (9999f * rootm));
+
+                if (sprinting)
+                {
+                    if (inpDirection.magnitude < 0.25f || Vector3.Dot(inpDirection.normalized, Vector3.forward) < 0.5f)
+                    {
+                        ChangeSprintState(false);
+                    }
+                    else
+                    {
+                        inpDirection = inpDirection.normalized;
+                    }
+                }
+
+                if (inpDirection.magnitude >= 0.1f)
+                {
+                    moveDir = Quaternion.Euler(0, angle, 0) * inpDirection;
+                }
+                else
+                {
+                    moveDir = Vector3.zero;
+                }
+
+                //transform.rotation = Quaternion.Euler(0, heading, 0);
+            }
+            else
+            {
+                if (sprinting)
+                {
+                    if (inpDirection.magnitude < 0.25f)
+                    {
+                        ChangeSprintState(false);
+                    }
+                    else
+                    {
+                        inpDirection = inpDirection.normalized;
+                    }
+                }
+
+                if (inpDirection.magnitude >= 0.1f)
+                {
+                    inpDirNormal = inpDirection.normalized;
+                    targetAngle = Mathf.Atan2(inpDirNormal.x, inpDirNormal.z) * Mathf.Rad2Deg + heading;
+                    angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime + (9999f * rootm));
+                    //transform.rotation = Quaternion.Euler(0, angle, 0);
+
+                    moveDir = Quaternion.Euler(0, angle, 0) * Vector3.forward;
+                }
+                else
+                {
+                    moveDir = Vector3.zero;
+                }
+            }
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if (actor.isPlayer)
+        {
+            aimEuler = camControl.aimEuler;
+            pitch = aimEuler.x;
+            heading = aimEuler.y;
+            yaw = aimEuler.z;
+
+            CameraControllerBase.current.UpdateCameraTransform();
+        }
+
+        lookAtVector = Quaternion.Euler(aimEuler) * Vector3.forward;
+        useLookAt = Vector3.Dot(lookAtVector, transform.forward) > 0;
+        lookLerp = Mathf.Lerp(lookLerp, useLookAt ? 1 : 0, Time.deltaTime * 2);
+
+        if (useLookAt) lookAt = actor.target.position + lookAtVector * 10f;
+
+        lookAtLerp = Vector3.SlerpUnclamped(actor.target.position + transform.forward * 10f, lookAt, lookLerp);
+
+        if (eqp.isArmed)
+        {
+            transform.rotation = Quaternion.Euler(0, heading, 0);
+        }
+        else
+        {
+            if (inpDirection.magnitude >= 0.1f)
+            {
+                transform.rotation = Quaternion.Euler(0, angle, 0);
+            }
+        }
+
+        if (eqp.isArmed)
+        {
+            weaponHolder.rotation = Quaternion.Lerp(
+                   Quaternion.Euler(Mathf.LerpAngle(aimEuler.x, 0f, eqp.currSlot.entity.relo_fade), aimEuler.y, 0),
+                   rh.rotation * Quaternion.Euler(eqp.currSlot.entity.data.inHandRotation),
+                   weap_to_rh);
+
+            weaponHolder.position = Vector3.Lerp(
+                weaponPivot.position,
+                rh.TransformPoint(eqp.currSlot.entity.data.inHandOffset),
+                weap_to_rh);
+        }
+    }
+    public void LookAtPoint(Vector3 point)
+    {
+        //lookAt = point;
+
+        lookatQuat = Quaternion.LookRotation((point - actor.target.position).normalized, Vector3.up);
+
+        pitch = lookatQuat.eulerAngles.x;
+        heading = lookatQuat.eulerAngles.y;
+    }
+
+    private void OnAnimatorIK(int layerIndex)
+    {
+        if (actor.isAlive)
+        {
+            animator.SetLookAtWeight(1f, 0.0f, 1f, 1f, 1f);
+            animator.SetLookAtPosition(lookAtLerp);
+            /*if (eqp.isArmed)
+            {
+                animator.SetLookAtWeight(1f, 0.0f, 1f, 1f, 1f);
+            }
+            else
+            {
+                animator.SetLookAtWeight(1f, 0.0f, 1f, 1f, 1f);
+            }*/
         }
     }
 
@@ -296,7 +424,17 @@ public class ActorMotor : MonoBehaviour
         {
             if (!sprinting)
             {
-                if (Vector3.Angle(inpDirection, Vector3.forward) < 45f && !crouching && inpDirection.sqrMagnitude > 0.1f)
+                if (crouching || inpDirection.sqrMagnitude < 0.25f) return;
+
+                if (eqp.isArmed)
+                {
+                    if (Vector3.Dot(inpDirection, Vector3.forward) > 0.5f)
+                    {
+                        if (aiming) ChangeAimState(false);
+                        ChangeSprintState(true);
+                    }
+                }
+                else
                 {
                     if (aiming) ChangeAimState(false);
                     ChangeSprintState(true);
@@ -315,27 +453,12 @@ public class ActorMotor : MonoBehaviour
         OnSprintStateChanged?.Invoke(state);
     }
 
-    private void OnPlayerControl_ChangeGun(bindState state)
+    private void OnPlayerControl_Equipment(bindState state)
     {
-        if (state == bindState.down)
+        /*if (state == bindState.down)
         {
-            /*if (actWeapon.slot == 0)
-            {
-                if (!actWeapon.IsEntityEmpty(1))
-                {
-                    actWeapon.ChangeSlot(1);
-                }
-            }
-            else
-            {
-                if (!actWeapon.IsEntityEmpty(0))
-                {
-                    actWeapon.ChangeSlot(0);
-                }
-            }*/
-
             ChangeAimState(false);
-        }
+        }*/
     }
 
     private void OnPlayerControl_Crouch(bindState state)

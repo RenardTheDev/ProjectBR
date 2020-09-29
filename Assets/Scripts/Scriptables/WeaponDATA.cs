@@ -59,8 +59,8 @@ public class WeaponDATA : ScriptableObject
 
     [Header("anim_sprinting")]
     public HumanBodyBones sprintPivot = HumanBodyBones.Chest;
-    public Vector3 sprintOffset;
-    public Vector3 sprintAngle;
+    public Vector3 inHandOffset;
+    public Vector3 inHandRotation;
     [Range(0, 1)] public float[] sprintHIK = { 0, 0 };
     public GripType grip;
     //public AnimationClip sprintAnimation;

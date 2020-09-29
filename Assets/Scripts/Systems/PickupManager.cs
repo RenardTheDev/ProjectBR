@@ -97,7 +97,6 @@ public class PickupManager : MonoBehaviour
 
             activePickup[item].Add(spawned_pickup);
             inactivePickup[item].Remove(spawned_pickup);
-
         }
         else
         {
@@ -115,7 +114,6 @@ public class PickupManager : MonoBehaviour
 
             activePickup[weapon.inv_object].Add(spawned_pickup);
             inactivePickup[weapon.inv_object].Remove(spawned_pickup);
-
         }
         else
         {

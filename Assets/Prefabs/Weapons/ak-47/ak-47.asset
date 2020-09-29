@@ -16,7 +16,7 @@ MonoBehaviour:
   type: 0
   prefab: {fileID: 2218609448374979306, guid: 3419dd96081bcc04bb36cdec45f449f9, type: 3}
   inv_object: {fileID: 11400000, guid: 793a87d7e4ad6e941836ba81908193bd, type: 2}
-  icon: {fileID: 3355562461813336969, guid: c12be39af1fe5e94bac868ec93ee9d66, type: 3}
+  icon: {fileID: 21300000, guid: 844973df2af41db4ca0bd10cc7dbbf2e, type: 3}
   sfx_shot: {fileID: 8300000, guid: 18a59847368c24843956d0e1175a4d9d, type: 3}
   sfx_chamber: {fileID: 8300000, guid: cbbae5c89b1499d479ad0b625db768df, type: 3}
   sfx_insert: {fileID: 8300000, guid: 2e87cad9eb001f14595d4879f2b75248, type: 3}
@@ -47,8 +47,8 @@ MonoBehaviour:
   bonePivot: 12
   offset: {x: 0, y: 0, z: 0}
   sprintPivot: 18
-  sprintOffset: {x: -0.15, y: -0.2, z: 0.1}
-  sprintAngle: {x: 0, y: 100, z: 90}
+  inHandOffset: {x: 0, y: 0, z: 0}
+  inHandRotation: {x: 0, y: 0, z: 0}
   sprintHIK:
   - 1
   - 0

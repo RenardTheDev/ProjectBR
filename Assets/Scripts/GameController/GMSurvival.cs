@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
@@ -18,6 +17,8 @@ public class GMSurvival : MonoBehaviour
     public int kills;
     public float score;
     public int money;
+
+    public WeaponDATA[] PlayerStartingWeapons;
 
     //---UI Stats---
     /*public Text label_wave;
@@ -55,10 +56,41 @@ public class GMSurvival : MonoBehaviour
         CameraControllerBase.current.ChangeToState("Cinematic", 0);
 
         CharacterManager.current.SpawnCharacter(PlayerSpawner.position, PlayerSpawner.rotation, true);
-        GameUI.current.DisableAllUICanvas();
-        GameUI.current.EnableUICanvas("msg");
+
+        if (PlayerStartingWeapons != null && PlayerStartingWeapons.Length > 0)
+        {
+            var eqp = Actor.PLAYERACTOR.GetComponent<ActorEquipment>();
+            var inv = Actor.PLAYERACTOR.GetComponent<ActorInventory>();
+            foreach (var g in PlayerStartingWeapons)
+            {
+                if (g.type == WeaponType.Primary)
+                {
+                    if (eqp.slots[0].isEmpty)
+                    {
+                        eqp.AssignWeaponToSlot(0, g);
+                    }
+                    else
+                    {
+                        eqp.AssignWeaponToSlot(1, g);
+                    }
+                }
+                else if (g.type == WeaponType.Secondary)
+                {
+                    eqp.AssignWeaponToSlot(2, g);
+                }
+
+                inv.inventory.AddItem(g.ammoType.invItem, g.clipSize * 4);
+            }
+
+            yield return new WaitForEndOfFrame();
+            //eqp.ChangeSlot(0);
+        }
+
+        GameUI.current.DisableAllCanvas();
+        GameUI.current.c_msg.enabled = true;
 
         yield return new WaitForSeconds(2f);
+        GameUI.current.uip_gameplay.SetActive(true);
 
         PlayerUI.current.ShowBigCenterMSG("SURVIVAL MODE", col_attention, "Survive 10 rounds to win", 2, 1);
 
@@ -66,9 +98,9 @@ public class GMSurvival : MonoBehaviour
 
         yield return new WaitForSeconds(GameStartTime);
 
-        GameUI.current.EnableUICanvas("scr_effect");
-        GameUI.current.EnableUICanvas("player");
-        GameUI.current.EnableUICanvas("controls");
+        GameUI.current.c_effects.enabled = true;
+        GameUI.current.c_player.enabled = true;
+        GameUI.current.uip_controls.SetActive(true);
         StartCoroutine(WavePreparation());
     }
 
@@ -136,8 +168,9 @@ public class GMSurvival : MonoBehaviour
     {
         PlayerUI.current.ShowBigCenterMSG("Wave complete", col_win, "", 2, 1f);
 
-        GameUI.current.DisableUICanvas("player");
-        GameUI.current.DisableUICanvas("inv");
+        GameUI.current.c_player.enabled = false;
+        GameUI.current.c_inv.enabled = false;
+
         CameraControllerBase.current.ChangeToState("waveEnd_0", 0);
         yield return new WaitForSeconds(0.25f);
 
@@ -146,8 +179,9 @@ public class GMSurvival : MonoBehaviour
         //if (aw.isArmed) aw.currWEntity.TryToReload();
 
         yield return new WaitForSeconds(3.75f);
-        GameUI.current.EnableUICanvas("player");
-        if (GameUI.current.invOpened) GameUI.current.EnableUICanvas("inv");
+
+        GameUI.current.c_player.enabled = true;
+        if (GameUI.current.invOpened) GameUI.current.c_inv.enabled = true;
 
         Wave++;
         //label_wave.text = "Wave: <color=#FF9632>" + Wave + "</color>";

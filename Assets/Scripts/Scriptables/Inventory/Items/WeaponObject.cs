@@ -19,5 +19,6 @@ public class WeaponObject : ItemObject
     {
         prefab_eq = weapon.prefab;
         icon = weapon.icon;
+        weapon.icon = icon;
     }
 }

@@ -151,12 +151,12 @@ public class CameraControllerBase : MonoBehaviour
             {
 
             }
-            UpdateCameraTransform();
+            //UpdateCameraTransform();
             //UpdateCamera();
         }
     }
 
-    void UpdateCameraTransform()
+    public void UpdateCameraTransform()
     {
         cm_trans_normal.rotation = Quaternion.Euler(aimEuler);
         cm_trans_normal.position = t_trans.position + _base_offset + Quaternion.Euler(0, aimEuler.y, 0) * hips_offset + cm_trans_normal.rotation * (recoil_offset + _side_offset);

@@ -10,6 +10,7 @@ public class InventoryUI : MonoBehaviour
 
     public ItemObject[] itemBase;
     public int y_space_between_item = 2;
+    public int item_height = 48;
 
     public GameObject itemPrefab;
 
@@ -53,8 +54,6 @@ public class InventoryUI : MonoBehaviour
             GenerateVicinityInventory(player.transform.position + vicOffset, vicRadius, pickUpMask);
             UpdateVicinityDisplay();
         }
-
-        //UpdatePlayerDisplay();
     }
 
     private void OnDrawGizmos()
@@ -109,12 +108,12 @@ public class InventoryUI : MonoBehaviour
         {
             if (selectedEQSlot != -1)
             {
-                if (eqp.slots[selectedEQSlot].IsEmpty())
+                if (eqp.slots[selectedEQSlot].isEmpty)
                 {
                     if (vic.ContainsSlot(slot))
                     {
                         var wSlot = eqp.AssignWeaponToSlot(selectedEQSlot, ((WeaponObject)slot.item).weapon);
-                        eqSlotUI[selectedEQSlot].AssignSlot(wSlot);
+                        eqSlotUI[selectedEQSlot].UpdateSlotPlate();
 
                         eqSlotUI[selectedEQSlot].ChangeSelection(false);
                         selectedEQSlot = -1;
@@ -133,7 +132,7 @@ public class InventoryUI : MonoBehaviour
                             eqp.slots[selectedEQSlot].entity.data);
 
                         var wSlot = eqp.AssignWeaponToSlot(selectedEQSlot, ((WeaponObject)slot.item).weapon);
-                        eqSlotUI[selectedEQSlot].AssignSlot(wSlot);
+                        eqSlotUI[selectedEQSlot].UpdateSlotPlate();
 
                         eqSlotUI[selectedEQSlot].ChangeSelection(false);
                         selectedEQSlot = -1;
@@ -145,17 +144,37 @@ public class InventoryUI : MonoBehaviour
             else
             {
                 int toSlot = 0;
-                for (int i = 2; i >= 0; i--)
+                WeaponDATA weap = ((WeaponObject)slot.item).weapon;
+
+                switch (weap.type)
                 {
-                    if (eqp.slots[toSlot].IsEmpty()) toSlot = i;
+                    case WeaponType.Primary:
+                        {
+                            for (int i = 1; i >= 0; i--)
+                            {
+                                if (eqp.slots[i].isEmpty) toSlot = i;
+                            }
+                        }
+                        break;
+                    case WeaponType.Secondary:
+                        {
+                            toSlot = 2;
+                        }
+                        break;
+                    case WeaponType.Melee:
+                        //--- for later implementation
+                        break;
+                    case WeaponType.Throwable:
+                        //--- for later implementation
+                        break;
                 }
 
-                if (eqp.slots[toSlot].IsEmpty())
+                if (eqp.slots[toSlot].isEmpty)
                 {
                     if (vic.ContainsSlot(slot))
                     {
-                        var wSlot = eqp.AssignWeaponToSlot(toSlot, ((WeaponObject)slot.item).weapon);
-                        eqSlotUI[toSlot].AssignSlot(wSlot);
+                        var wSlot = eqp.AssignWeaponToSlot(toSlot, weap);
+                        eqSlotUI[selectedEQSlot].UpdateSlotPlate();
 
                         DeletePickup(slot);
                     }
@@ -170,7 +189,7 @@ public class InventoryUI : MonoBehaviour
                             eqp.slots[toSlot].entity.data);
 
                         var wSlot = eqp.AssignWeaponToSlot(toSlot, ((WeaponObject)slot.item).weapon);
-                        eqSlotUI[toSlot].AssignSlot(wSlot);
+                        eqSlotUI[selectedEQSlot].UpdateSlotPlate();
 
                         DeletePickup(slot);
                     }
@@ -185,32 +204,6 @@ public class InventoryUI : MonoBehaviour
                 TakeSlot(slot);
             }
         }
-
-        /*if (selectedEQSlot != -1)
-        {
-            if (slot.item is WeaponObject)
-            {
-                if (inv.ContainsSlot(slot))
-                {
-                    var wSlot = eqp.AssignWeaponToSlot(selectedEQSlot, ((WeaponObject)slot.item).weapon);
-                    eqSlotUI[selectedEQSlot].AssignSlot(wSlot);
-                }
-                else if (vic.ContainsSlot(slot))
-                {
-                    var newslot = TakeSlot(slot);
-
-                    var wSlot = eqp.AssignWeaponToSlot(selectedEQSlot, ((WeaponObject)newslot.item).weapon);
-                    eqSlotUI[selectedEQSlot].AssignSlot(wSlot);
-                }
-            }
-        }
-        else
-        {
-            if (vic.ContainsSlot(slot))
-            {
-                TakeSlot(slot);
-            }
-        }*/
     }
 
     InventorySlot TakeSlot(InventorySlot slot)
@@ -236,43 +229,59 @@ public class InventoryUI : MonoBehaviour
 
     public void OnEquipmentSlotClicked(int slotID)
     {
-        if (selectedEQSlot == -1)
+        if (GameUI.current.invOpened)
         {
-            //--- Start equipment selection ---
-            selectedEQSlot = slotID;
-            eqSlotUI[selectedEQSlot].ChangeSelection(true);
+            if (selectedEQSlot == -1)
+            {
+                //--- Start equipment selection ---
+                selectedEQSlot = slotID;
+                eqSlotUI[selectedEQSlot].ChangeSelection(true);
+            }
+            else
+            {
+                if (slotID == selectedEQSlot)
+                {
+                    //--- Cancel equipment selection ---
+                    eqSlotUI[selectedEQSlot].ChangeSelection(false);
+                    selectedEQSlot = -1;
+                }
+            }
+        }
+        else if (GameUI.current.eqpOpened)
+        {
+            if (!eqp.slots[slotID].isEmpty)
+            {
+                eqp.ChangeSlot(slotID);
+
+                GameUI.current.ToggleEquipment(false);
+            }
+        }
+    }
+
+    public void OnToggleInventory(bool toggle)
+    {
+        //Debug.Log($"OnToggleInventory({toggle})");
+
+        if (toggle)
+        {
+            for (int i = 0; i < eqSlotUI.Length; i++)
+            {
+                eqSlotUI[i].UpdateSlotPlate();
+            }
         }
         else
         {
-            if (slotID == selectedEQSlot)
+            if (selectedEQSlot != -1)
             {
-                //--- Cancel equipment selection ---
                 eqSlotUI[selectedEQSlot].ChangeSelection(false);
                 selectedEQSlot = -1;
             }
         }
     }
 
-    public void OnInventoryOpened()
-    {
-        for (int i = 0; i < eqSlotUI.Length; i++)
-        {
-            eqSlotUI[i].UpdateSlotPlate();
-        }
-    }
-
-    public void OnInventoryClosed()
-    {
-        if (selectedEQSlot != -1)
-        {
-            eqSlotUI[selectedEQSlot].ChangeSelection(false);
-            selectedEQSlot = -1;
-        }
-    }
-
     public void UpdatePlayerDisplay()
     {
-        if (plSlots == null) plSlots = new List<InventorySlotUI>();
+        if (plSlots == null && GameUI.current.invOpened) plSlots = new List<InventorySlotUI>();
 
         inv.container.Sort((x, y) => x.item.type.CompareTo(y.item.type));
 
@@ -291,7 +300,7 @@ public class InventoryUI : MonoBehaviour
             if (i < inv.container.Count)
             {
                 if (!plSlots[i].gameObject.activeSelf) plSlots[i].gameObject.SetActive(true);
-                plSlots[i].rt.localPosition = new Vector3(8, -(48 + y_space_between_item) * i, 0);
+                plSlots[i].rt().localPosition = new Vector3(8, -(item_height + y_space_between_item) * i, 0);
                 plSlots[i].AssignInfo(inv.container[i]);
             }
             else
@@ -300,7 +309,7 @@ public class InventoryUI : MonoBehaviour
             }
         }
 
-        playerListParent.sizeDelta = new Vector2(playerListParent.sizeDelta.x, inv.container.Count * (48 + y_space_between_item) - y_space_between_item);
+        playerListParent.sizeDelta = new Vector2(playerListParent.sizeDelta.x, inv.container.Count * (item_height + y_space_between_item) - y_space_between_item);
     }
 
     public void GenerateVicinityInventory(Vector3 pos, float radius, LayerMask mask)
@@ -319,12 +328,11 @@ public class InventoryUI : MonoBehaviour
                 pickups.Add(slot, pickup.GetComponent<Item>());
             }
         }
-
     }
 
     public void UpdateVicinityDisplay()
     {
-        if (vicSlots == null) vicSlots = new List<InventorySlotUI>();
+        if (vicSlots == null && GameUI.current.invOpened) vicSlots = new List<InventorySlotUI>();
 
         vic.container.Sort((x, y) => x.item.type.CompareTo(y.item.type));
 
@@ -343,7 +351,7 @@ public class InventoryUI : MonoBehaviour
             if (i < vic.container.Count)
             {
                 if (!vicSlots[i].gameObject.activeSelf) vicSlots[i].gameObject.SetActive(true);
-                vicSlots[i].rt.localPosition = new Vector3(8, -(48 + y_space_between_item) * i, 0);
+                vicSlots[i].rt().localPosition = new Vector3(8, -(item_height + y_space_between_item) * i, 0);
                 vicSlots[i].AssignInfo(vic.container[i]);
             }
             else
@@ -352,7 +360,7 @@ public class InventoryUI : MonoBehaviour
             }
         }
 
-        playerListParent.sizeDelta = new Vector2(playerListParent.sizeDelta.x, vic.container.Count * (48 + y_space_between_item) - y_space_between_item);
+        playerListParent.sizeDelta = new Vector2(playerListParent.sizeDelta.x, vic.container.Count * (item_height + y_space_between_item) - y_space_between_item);
     }
 
     public bool isActive()

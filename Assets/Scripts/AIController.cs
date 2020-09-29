@@ -318,7 +318,7 @@ public class AIController : MonoBehaviour
 
                 //aiming
                 b.aiming = Vector3.Lerp(b.aiming, playerActor.target.position, Time.deltaTime * 10f);
-                b.look.LookAtPoint(b.aiming);
+                b.motor.LookAtPoint(b.aiming);
 
                 //shooting
 
@@ -360,7 +360,7 @@ public class AIController : MonoBehaviour
                 }
 
                 b.aiming = Vector3.Lerp(b.aiming, b.movement.normalized * 10f + b.actor.target.position, Time.deltaTime * 10f);
-                b.look.LookAtPoint(b.aiming);
+                b.motor.LookAtPoint(b.aiming);
 
                 BotShoot(b, false);
             }

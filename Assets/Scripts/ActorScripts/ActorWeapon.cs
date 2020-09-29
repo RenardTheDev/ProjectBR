@@ -12,6 +12,7 @@ public class ActorWeapon : MonoBehaviour
     ActorEquipment eqp;
     ActorInventory inv;
 
+    Transform rh;
 
     public AudioSource sfx_Shooting;
     public AudioSource sfx_Handling;
@@ -27,11 +28,18 @@ public class ActorWeapon : MonoBehaviour
         inv = GetComponent<ActorInventory>();
 
         //currSlot = slots[0];
+
+        rh = anim.GetBoneTransform(HumanBodyBones.RightHand);
     }
 
     private void Start()
     {
+        eqp.OnSlotDraw += OnSlotDraw;
+    }
 
+    private void OnSlotDraw(WeaponSlot slot)
+    {
+        sprintPivot = anim.GetBoneTransform(slot.entity.data.sprintPivot);
     }
 
     public bool inp_fire;
@@ -75,27 +83,18 @@ public class ActorWeapon : MonoBehaviour
     float dirLock_fade;
     AvatarIKGoal[] goal = new AvatarIKGoal[] { AvatarIKGoal.LeftHand, AvatarIKGoal.RightHand };
 
+    public void UpdateWeapon()
+    {
+
+    }
+
     private void OnAnimatorIK(int layerIndex)
     {
         if (!actor.isAlive) return;
 
         dirLock_fade = motor.dirLock_fade;
-        if (eqp.isArmed)
-        {
-            eqp.WeaponHolder.rotation = Quaternion.Lerp(
-                Quaternion.Euler(Mathf.LerpAngle(look.aimEuler.x, 0f, eqp.currSlot.entity.relo_fade), look.aimEuler.y, 0),
-                sprintPivot.rotation * Quaternion.Euler(eqp.currSlot.entity.data.sprintAngle),
-                motor.dirLock_fade);
 
-            eqp.WeaponHolder.position = Vector3.Lerp(
-                bonePivot.position,
-                sprintPivot.TransformPoint(eqp.currSlot.entity.data.sprintOffset),
-                motor.dirLock_fade);
-
-            //anim.SetLookAtWeight(Mathf.Clamp01(1f - relo_fade - dirLock_fade), 0.05f, 1f, 1f, 1f);
-        }
-
-        useIK = eqp.isArmed && !eqp.currSlot.IsEmpty() && eqp.currSlot.entity.data.type != WeaponType.Melee;
+        useIK = eqp.isArmed && !eqp.currSlot.isEmpty && eqp.currSlot.entity.data.type != WeaponType.Melee;
 
         if (useIK && eqp.isArmed)
         {
@@ -118,13 +117,6 @@ public class ActorWeapon : MonoBehaviour
         }
     }
 
-    //---EVENTS---
-
-    public delegate void SlotChangeHandler(int oldSlot, int newSlot, WeaponSlot[] slotInfo);
-    public event SlotChangeHandler OnSlotChanged;
-
-    public delegate void AmmoPickupHandler(AmmoDATA caliber, int amount);
-    public event AmmoPickupHandler OnAmmoPickedup;
 }
 
 [System.Serializable]
